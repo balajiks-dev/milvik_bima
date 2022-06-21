@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:milvik_bima/model/doctors_response_model.dart';
 
 abstract class DashboardState extends Equatable {
   const DashboardState();
@@ -28,7 +29,16 @@ class NetworkFailureState extends DashboardState {
 }
 
 class InitialDashboardSuccessState extends DashboardState {
+  final List<DoctorsResponseModel> doctorsList;
+  const InitialDashboardSuccessState({required this.doctorsList});
   @override
   List<Object> get props => [];
 }
 
+class InitialDashboardFailureState extends DashboardState {
+  final String error;
+
+  const InitialDashboardFailureState({required this.error});
+  @override
+  List<Object> get props => [error];
+}
