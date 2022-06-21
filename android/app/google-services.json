@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "595320667703",
+    "project_id": "doctor-management-1476f",
+    "storage_bucket": "doctor-management-1476f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:595320667703:android:a3b52cf752cd0872ea89b2",
+        "android_client_info": {
+          "package_name": "com.milvik.bima"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "595320667703-udo0he9070njtm84c0trbloushq1jvu3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.milvik.bima",
+            "certificate_hash": "48bfcc6a5628e0757b219ef41eaf3b60d3aafc36"
+          }
+        },
+        {
+          "client_id": "595320667703-4mjvd7s3r3pcm2tooqviggv8i9k3dh7t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALvO096vf8XJuLweAy7_Qe9_ccffFhPSI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "595320667703-4mjvd7s3r3pcm2tooqviggv8i9k3dh7t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
