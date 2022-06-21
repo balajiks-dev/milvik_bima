@@ -4,7 +4,6 @@ import 'package:milvik_bima/features/dashboard/dashboard_page.dart';
 import 'package:milvik_bima/features/login/bloc/login_bloc.dart';
 import 'package:milvik_bima/features/login/bloc/login_event.dart';
 import 'package:milvik_bima/features/login/bloc/login_state.dart';
-import 'package:milvik_bima/shared_widgets/failure.dart';
 import 'package:milvik_bima/shared_widgets/loading_indicator.dart';
 import 'package:milvik_bima/shared_widgets/snack_bar.dart';
 import 'package:milvik_bima/utils/constants.dart';
@@ -23,6 +22,7 @@ class LoginPage extends StatelessWidget {
       // then
       return false; // return true if the route to be popped
     }
+
     return WillPopScope(
       onWillPop: _willPopCallback,
       child: Scaffold(
@@ -45,7 +45,8 @@ class LoginPage extends StatelessWidget {
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (BuildContext context) => const DashboardPage()),
+                        builder: (BuildContext context) =>
+                            const DashboardPage()),
                     ModalRoute.withName('/'));
               }
             },
@@ -53,28 +54,27 @@ class LoginPage extends StatelessWidget {
               builder: (context, state) {
                 return Scaffold(
                   body: SingleChildScrollView(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  AppStrings.login,
-                                  style: ktsFontStyle16Regular,
-                                ),
-                                SizedBox(height: screenHeight(context) * 0.03),
-                                InkWell(
-                                  onTap: (){
-                                    BlocProvider.of<LoginBloc>(context).add(
-                                    LoginButtonPressedEvent(mobileNumber: 'dda')
-                                    );
-                                  },
-                                  child: Container(
-                                    child: Text('Login'),
-                                  ),
-                                ),
-                                SizedBox(height: screenHeight(context) * 0.03),
-                              ],
-                            ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          AppStrings.login,
+                          style: ktsFontStyle16Regular,
+                        ),
+                        SizedBox(height: screenHeight(context) * 0.03),
+                        InkWell(
+                          onTap: () {
+                            BlocProvider.of<LoginBloc>(context).add(
+                                LoginButtonPressedEvent(mobileNumber: 'dda'));
+                          },
+                          child: Container(
+                            child: Text('Login'),
                           ),
+                        ),
+                        SizedBox(height: screenHeight(context) * 0.03),
+                      ],
+                    ),
+                  ),
                 );
               },
             ),
