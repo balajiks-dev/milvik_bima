@@ -19,7 +19,6 @@ class DoctorsResponseModel {
   final String gender;
   final String height;
   final String weight;
-  final bool imageEdited;
   final String bloodGroupName;
   final int birthDay;
   final int birthMonth;
@@ -44,8 +43,7 @@ class DoctorsResponseModel {
         required this.bloodGroupName,
         required this.birthDay,
         required this.birthMonth,
-        required this.birthYear,
-      this.imageEdited = false});
+        required this.birthYear});
 
   factory DoctorsResponseModel.fromJson(Map<String, dynamic> json) {
     return DoctorsResponseModel(
@@ -67,8 +65,7 @@ class DoctorsResponseModel {
         bloodGroupName: json['bloodGroupName'] ?? "",
         birthDay: json['birthDay'] ?? 1,
         birthMonth: json['birthMonth'] ?? 1,
-        birthYear: json['birthYear'] ?? 1900,
-        imageEdited: json['imageEdited'] ?? false);
+        birthYear: json['birthYear'] ?? 1900);
   }
 
   Map<String, dynamic> toJson() {
@@ -88,7 +85,6 @@ class DoctorsResponseModel {
     data['gender'] = gender;
     data['height'] = height;
     data['weight'] = weight;
-    data['imageEdited'] = imageEdited;
     data['bloodGroupName'] = bloodGroupName;
     data['birthMonth'] = birthMonth;
     data['birthDay'] = birthDay;

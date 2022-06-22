@@ -96,7 +96,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           gender: doctorsList[event.index].gender,
           height: doctorsList[event.index].height,
           weight: doctorsList[event.index].weight,
-          imageEdited: true, bloodGroupName: doctorsList[event.index].bloodGroupName,
+          bloodGroupName: doctorsList[event.index].bloodGroupName,
         birthDay: doctorsList[event.index].birthDay,
         birthMonth: doctorsList[event.index].birthMonth,
         birthYear: doctorsList[event.index].birthYear
