@@ -1,3 +1,4 @@
+import 'package:avatar_view/avatar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -107,12 +108,17 @@ class ProfilePage extends StatelessWidget {
                     // Profile image
                     Positioned(
                         top: 50.0,
-                        child: CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 40,
-                            backgroundImage: NetworkImage(doctorsResponseModel!.profilePic,
-                            )
-                        ),
+                      child: AvatarView(
+                        radius: 30,
+                        borderColor: ColorData.kcWhite,
+                        isOnlyText: false,
+                        avatarType: AvatarType.CIRCLE,
+                        backgroundColor: Colors.red,
+                        imagePath:
+                        doctorsResponseModel!.profilePic,
+                        placeHolder: const Icon(Icons.person, size: 50,),
+                        errorWidget: const Icon(Icons.person, size: 50,),
+                      ),
                     ),
                     Positioned(
                       left: 10.0,

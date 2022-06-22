@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:milvik_bima/model/doctors_response_model.dart';
 import 'package:milvik_bima/network/api_services.dart';
 import 'package:milvik_bima/network/meta.dart';
+import 'package:milvik_bima/utils/constants.dart';
 import 'package:milvik_bima/utils/keys.dart';
 import 'package:milvik_bima/utils/sputils.dart';
 import 'package:milvik_bima/utils/url_utils.dart';
@@ -30,6 +31,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     }
     else if (event is UpdateProfileEvent) {
       yield ShowProgressBar();
+      if(event.firstName.isNotEmpty && event.lastName.isNotEmpty){
       String doctorsListString = SPUtil.getString(KeyStrings.kDoctorsList);
       List<DoctorsResponseModel> doctorsList = <DoctorsResponseModel>[];
       jsonDecode(doctorsListString).forEach(
@@ -55,6 +57,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       SPUtil.putString(KeyStrings.kDoctorsList, jsonEncode(doctorsList));
       yield DismissProgressBar();
       yield UpdateProfileSuccessState();
+      } else {
+        yield DismissProgressBar();
+        yield InitialProfileFailureState(error: event.firstName.isEmpty ? AppStrings.enterFirstName : AppStrings.enterLastName);
+      }
     } else if (event is EditProfileEvent){
       yield ShowProgressBar();
       yield DismissProgressBar();

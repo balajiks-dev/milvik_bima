@@ -1,3 +1,5 @@
+import 'package:avatar_view/avatar_view.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +12,7 @@ import 'package:milvik_bima/shared_widgets/network_failure.dart';
 import 'package:milvik_bima/utils/assets.dart';
 import 'package:milvik_bima/utils/colors.dart';
 import 'package:milvik_bima/utils/text_styles.dart';
+import 'package:milvik_bima/utils/ui_helpers.dart';
 
 import '/utils/constants.dart';
 import 'bloc/dashboard_bloc.dart';
@@ -33,12 +36,12 @@ class DashboardPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: _willPopCallback,
       child: Scaffold(
-        backgroundColor: ColorData.kcPrimaryColor,
+        backgroundColor: ColorData.kcPrimaryDarkColor,
         appBar: AppBar(
           backgroundColor: ColorData.kcPrimaryColor,
           title: Text(
             AppStrings.bimaDoctor,
-            style: ktsFontStyle16PrimarySemiBold,
+            style: ktsFontStyle16SemiBoldWhite,
           ),
           actions: [
             Image.asset(
@@ -94,27 +97,29 @@ class DashboardPage extends StatelessWidget {
                 return isLoaded
                     ? Scaffold(
                         backgroundColor: ColorData.kcWhite,
-                        body: Column(
-                          children: [
-                            // Visibility(
-                            //   visible: doctorsList.isNotEmpty,
-                            //   child: Container(
-                            //     height: screenHeight(context) * 0.3,
-                            //     width: screenWidth(context) * 0.9,
-                            //     child: CarouselSlider(
-                            //       items: showTopRatedDoctorView(topRatedDoctorsList),
-                            //       options: CarouselOptions(
-                            //           viewportFraction: 1,
-                            //         autoPlay: true,
-                            //         scrollDirection: Axis.horizontal,
-                            //           autoPlayInterval: const Duration(seconds: 1)
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
-                            Expanded(
-                              child: ListView.builder(
+                        body: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Visibility(
+                                visible: doctorsList.isNotEmpty,
+                                child: SizedBox(
+                                  height: screenHeight(context) * 0.15,
+                                  width: screenWidth(context),
+                                  child: CarouselSlider(
+                                    items: showTopRatedDoctorView(topRatedDoctorsList),
+                                    options: CarouselOptions(
+                                        viewportFraction: 1,
+                                      autoPlay: true,
+                                      scrollDirection: Axis.horizontal,
+                                        autoPlayInterval: const Duration(seconds: 1)
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              ListView.builder(
                                   itemCount: doctorsList.length,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return Column(
@@ -140,8 +145,8 @@ class DashboardPage extends StatelessWidget {
                                       ],
                                     );
                                   }),
-                            ),
-                          ],
+                            ],
+                          ),
                         ))
                     : const FailureUI(title: AppStrings.noDataFound);
               },
@@ -156,44 +161,63 @@ class DashboardPage extends StatelessWidget {
       List<DoctorsResponseModel> topRatedDoctorsList) {
     List<Widget> topRatedDoctorCardView = <Widget>[];
     for (int i = 0; i < topRatedDoctorsList.length; i++) {
-      topRatedDoctorCardView.add(Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CircleAvatar(
-                radius: 30, // Image radius
-                backgroundImage:
-                    NetworkImage(topRatedDoctorsList[i].profilePic)),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 10.0, 5.0, 2.0),
-                    child: Text(
-                      "${topRatedDoctorsList[i].firstName} ${topRatedDoctorsList[i].lastName}",
-                      style: ktsFontStyle16PrimarySemiBold,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 0.0, 5.0, 2.0),
-                    child: Text(
-                      topRatedDoctorsList[i].qualification,
-                      style: ktsFontStyle14PrimaryRegular,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 10.0, 5.0, 2.0),
-                    child: Text("Star Rating: ${topRatedDoctorsList[i].rating}",
-                        style: ktsFontStyle14RegularBlack),
-                  )
-                ],
+      topRatedDoctorCardView.add(
+          Padding(
+        padding: const EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15.0),
+            color: ColorData.kcPrimaryDarkColor
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: AvatarView(
+                  radius: 30,
+                  borderColor: ColorData.kcPrimaryDarkColor,
+                  isOnlyText: false,
+                  avatarType: AvatarType.CIRCLE,
+                  backgroundColor: Colors.red,
+                  imagePath:
+                  topRatedDoctorsList[i].profilePic,
+                  placeHolder: const Icon(Icons.person, size: 50,),
+                  errorWidget: const Icon(Icons.person, size: 50,),
+                ),
               ),
-            ),
-          ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 10.0, 5.0, 2.0),
+                      child: Text(
+                        "${topRatedDoctorsList[i].firstName} ${topRatedDoctorsList[i].lastName}",
+                        style: ktsFontStyle16SemiBoldWhite,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 0.0, 5.0, 2.0),
+                      child: Text(
+                        topRatedDoctorsList[i].qualification,
+                        style: ktsFontStyle14White,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 5.0, 5.0, 8.0),
+                      child: Text("Star Rating: ${topRatedDoctorsList[i].rating}",
+                          style: ktsFontStyle14YellowRegular),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ));
     }
@@ -206,9 +230,17 @@ class DashboardPage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          CircleAvatar(
-              radius: 30, // Image radius
-              backgroundImage: NetworkImage(doctorModel.profilePic)),
+          AvatarView(
+            radius: 30,
+            borderColor: ColorData.kcPrimaryDarkColor,
+            isOnlyText: false,
+            avatarType: AvatarType.CIRCLE,
+            backgroundColor: Colors.red,
+            imagePath:
+            doctorModel.profilePic,
+            placeHolder: const Icon(Icons.person, size: 50,),
+            errorWidget: const Icon(Icons.person, size: 50,),
+          ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

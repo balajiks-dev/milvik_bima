@@ -75,6 +75,12 @@ TextStyle ktsFontStyle14PrimaryRegular = GoogleFonts.roboto(
   fontWeight: FontWeight.w400,
 );
 
+TextStyle ktsFontStyle14YellowRegular = GoogleFonts.roboto(
+  color: ColorData.kcYellowButton,
+  fontSize: 14,
+  fontWeight: FontWeight.w400,
+);
+
 TextStyle ktsFontStyle16SemiBoldWhite = GoogleFonts.roboto(
   color: ColorData.kcWhite,
   fontSize: 16,

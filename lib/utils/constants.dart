@@ -17,6 +17,8 @@ class AppStrings {
   static const String checkTermsAndCondition = "Check Terms & Condition";
   static const String enterOTP = "Enter OTP";
   static const String enterValidOTP = "Enter Valid OTP";
+  static const String enterFirstName = "Enter First Name";
+  static const String enterLastName = "Enter Last Name";
 
 
   //Registration
