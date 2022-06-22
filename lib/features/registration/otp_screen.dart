@@ -122,10 +122,8 @@ class OtpPage extends StatelessWidget {
                       const EdgeInsets.symmetric(vertical: 8.0, horizontal: 30),
                   child: PinCodeTextField(
                     appContext: context,
-                    pastedTextStyle: TextStyle(
-                      color: Colors.green.shade600,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    textStyle: ktsFontStyle20SemiBoldYellow,
+                    pastedTextStyle: ktsFontStyle20SemiBoldYellow,
                     length: 6,
                     obscuringCharacter: '*',
                     blinkWhenObscuring: true,
