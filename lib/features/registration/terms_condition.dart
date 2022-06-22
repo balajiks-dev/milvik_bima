@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:milvik_bima/utils/colors.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 
 ///
@@ -13,12 +14,13 @@ class TermsAndConditionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: ColorData.kcPrimaryDarkColor,
         title: const Text('')
       ),
         body: WebViewPlus(
           javascriptMode: JavascriptMode.unrestricted,
           onWebViewCreated: (controller) {
-            controller.loadUrl('images/index.html');
+            controller.loadUrl('assets/images/index.html');
           },
         ));
   }
