@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:milvik_bima/features/dashboard/dashboard_page.dart';
-import 'package:milvik_bima/features/login/login_screen.dart';
+import 'package:milvik_bima/features/registration/registration.dart';
 import 'package:milvik_bima/features/splash/splash.dart';
 import 'package:milvik_bima/utils/colors.dart';
 import 'package:milvik_bima/utils/keys.dart';
@@ -42,7 +42,7 @@ class App extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                const LoginPage()),
+                                const RegistrationPage()),
                         ModalRoute.withName('/'));
                     break;
                   default:

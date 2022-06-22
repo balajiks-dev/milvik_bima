@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:milvik_bima/model/doctors_response_model.dart';
 import 'package:milvik_bima/network/api_services.dart';
 import 'package:milvik_bima/network/meta.dart';
+import 'package:milvik_bima/utils/keys.dart';
+import 'package:milvik_bima/utils/sputils.dart';
 import 'package:milvik_bima/utils/url_utils.dart';
 import 'dashboard_event.dart';
 import 'dashboard_state.dart';
@@ -18,17 +20,29 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   ) async* {
     if (event is InitialDashboardEvent) {
       yield ShowProgressBar();
-      Meta meta = await APIServices().processGetURL(URLUtils().getDoctorsList(), '');
-      if(meta.statusCode == 200){
+      String doctorsListString = SPUtil.getString(KeyStrings.kDoctorsList);
+      if(doctorsListString.isNotEmpty){
         List<DoctorsResponseModel> doctorsList = <DoctorsResponseModel>[];
-        jsonDecode(meta.statusMsg).forEach(
+        jsonDecode(doctorsListString).forEach(
                 (f) => doctorsList.add(DoctorsResponseModel.fromJson(f)));
         doctorsList.sort((a,b) => b.rating.compareTo(a.rating));
-            yield DismissProgressBar();
+        yield DismissProgressBar();
         yield InitialDashboardSuccessState(doctorsList: doctorsList);
       } else {
-        yield DismissProgressBar();
-        yield InitialDashboardFailureState(error: meta.statusMsg);
+        Meta meta = await APIServices().processGetURL(
+            URLUtils().getDoctorsList(), '');
+        if (meta.statusCode == 200) {
+          List<DoctorsResponseModel> doctorsList = <DoctorsResponseModel>[];
+          jsonDecode(meta.statusMsg).forEach(
+                  (f) => doctorsList.add(DoctorsResponseModel.fromJson(f)));
+          doctorsList.sort((a, b) => b.rating.compareTo(a.rating));
+          SPUtil.putString(KeyStrings.kDoctorsList, doctorsList.toString());
+          yield DismissProgressBar();
+          yield InitialDashboardSuccessState(doctorsList: doctorsList);
+        } else {
+          yield DismissProgressBar();
+          yield InitialDashboardFailureState(error: meta.statusMsg);
+        }
       }
     }
   }

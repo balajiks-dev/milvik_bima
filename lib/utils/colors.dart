@@ -20,6 +20,7 @@ class ColorData {
 
   //yellow
   static const Color kcYellow = Color(0xFFFFCC00);
+  static const Color kcYellowButton = Color.fromRGBO(183, 152, 77, 1);
 
   //green
   static const Color kcGreen = Color(0xFF55D187);
@@ -27,6 +28,7 @@ class ColorData {
   static const Color kcDarkGreenText = Color(0xFF0C8104);
   static const Color kcLightGreen = Color(0xFF32C992);
   static const Color kcLightGreenShade = Color(0xFFDAFFD7);
+  static const Color kcGreenButton = Color.fromRGBO(86, 179, 148, 1);
 
   //black
   static const Color kcBlack = Color(0xFF000000);
@@ -60,7 +62,8 @@ class ColorData {
   static const Color kLightGrayShade = Color(0xFFF9F9F9);
 
   //general
-  static const Color kcPrimaryColor = Color(0xFF015ecb);
+  static const Color kcPrimaryColor = Color(0xFF015ECB);
+  static const Color kcPrimaryDarkColor = Color(0xFF2F579F);
   static const Color kcButtonColor = Color(0xFF405698);
   static const Color kcToastColor = Color(0xFFEDEDED);
   static const Color kcQuizColor = Color(0xFFFFF7F7);

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:milvik_bima/features/login/login_screen.dart';
+import 'package:milvik_bima/features/registration/registration.dart';
 import 'package:milvik_bima/utils/assets.dart';
 import 'package:milvik_bima/utils/colors.dart';
 import 'package:milvik_bima/utils/constants.dart';
@@ -63,7 +63,7 @@ class CommonDrawer extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const LoginPage()),
+                    builder: (context) => const RegistrationPage()),
               );
             },
           ),
