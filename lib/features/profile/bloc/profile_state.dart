@@ -55,3 +55,12 @@ class EditProfileState extends ProfileState {
   @override
   List<Object> get props => [];
 }
+
+class DateofBirthChangeState extends ProfileState {
+  final int birthDay;
+  final int birthMonth;
+  final int birthYear;
+  const DateofBirthChangeState({required this.birthDay, required this.birthMonth, required this.birthYear});
+  @override
+  List<Object> get props => [];
+}

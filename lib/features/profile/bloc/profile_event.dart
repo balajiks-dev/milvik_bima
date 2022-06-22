@@ -22,7 +22,11 @@ class UpdateProfileEvent extends ProfileEvent {
   final String contactNumber;
   final String height;
   final String weight;
-  const UpdateProfileEvent({required this.index, required this.firstName, required this.lastName, required this.contactNumber, required this.gender, required this.height, required this.weight});
+  final String bloodGroupName;
+  final int birthDay;
+  final int birthMonth;
+  final int birthYear;
+  const UpdateProfileEvent({required this.index, required this.firstName, required this.lastName, required this.contactNumber, required this.gender, required this.height, required this.weight, required this.bloodGroupName, required this.birthDay, required this.birthMonth, required this.birthYear});
 
   @override
   List<Object> get props => [];
@@ -46,6 +50,15 @@ class ProfilePictureAddEvent extends ProfileEvent {
 }
 
 class ProfilePictureNotAddEvent extends ProfileEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class DateofBirthChangeEvent extends ProfileEvent {
+  final int birthDay;
+  final int birthMonth;
+  final int birthYear;
+  const DateofBirthChangeEvent({required this.birthDay, required this.birthMonth, required this.birthYear});
   @override
   List<Object> get props => [];
 }

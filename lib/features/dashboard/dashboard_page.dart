@@ -124,7 +124,7 @@ class DashboardPage extends StatelessWidget {
                               Visibility(
                                 visible: doctorsList.isNotEmpty,
                                 child: SizedBox(
-                                  height: screenHeight(context) * 0.15,
+                                  height: screenHeight(context) * 0.2,
                                   width: screenWidth(context),
                                   child: CarouselSlider(
                                     items: showTopRatedDoctorView(
@@ -318,21 +318,25 @@ class DashboardPage extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(50),
                   child: topRatedDoctorsList[i].profilePic.contains("http")
-                      ? CachedNetworkImage(
-                          imageUrl: topRatedDoctorsList[i].profilePic,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) {
-                            return const Icon(
-                              Icons.person,
-                              size: 50,
-                            );
-                          },
-                          errorWidget: (context, url, error) {
-                            return const Icon(
-                              Icons.person,
-                              size: 50,
-                            );
-                          })
+                      ? SizedBox(
+                    height: 70,
+                        width: 70,
+                        child: CachedNetworkImage(
+                            imageUrl: topRatedDoctorsList[i].profilePic,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) {
+                              return const Icon(
+                                Icons.person,
+                                size: 50,
+                              );
+                            },
+                            errorWidget: (context, url, error) {
+                              return const Icon(
+                                Icons.person,
+                                size: 50,
+                              );
+                            }),
+                      )
                       : SizedBox(
                           height: 70,
                           width: 70,
@@ -345,7 +349,7 @@ class DashboardPage extends StatelessWidget {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 10.0, 5.0, 2.0),
@@ -367,7 +371,7 @@ class DashboardPage extends StatelessWidget {
                       padding: const EdgeInsets.fromLTRB(8.0, 5.0, 5.0, 8.0),
                       child: Text(
                           "Star Rating: ${topRatedDoctorsList[i].rating}",
-                          style: ktsFontStyle14YellowRegular),
+                          style: ktsFontStyle16YellowColorRegular),
                     )
                   ],
                 ),

@@ -21,6 +21,18 @@ TextStyle ktsFontStyle16Regular = GoogleFonts.roboto(
   fontWeight: FontWeight.w400,
 );
 
+TextStyle ktsFontStyle16RegularGrawy = GoogleFonts.roboto(
+  color: ColorData.kcGrayShade_1,
+  fontSize: 16,
+  fontWeight: FontWeight.w400,
+);
+
+TextStyle ktsFontStyle12RegularGrawy = GoogleFonts.roboto(
+  color: ColorData.kcGrayShade_1,
+  fontSize: 12,
+  fontWeight: FontWeight.w400,
+);
+
 TextStyle ktsFontStyle16Bold = GoogleFonts.roboto(
   color: ColorData.kcBlack,
   fontSize: 16,
@@ -59,6 +71,12 @@ TextStyle ktsFontStyle14White = GoogleFonts.roboto(
 
 TextStyle ktsFontStyle16YellowRegular = GoogleFonts.roboto(
   color: ColorData.kcYellowButton,
+  fontSize: 16,
+  fontWeight: FontWeight.w400,
+);
+
+TextStyle ktsFontStyle16YellowColorRegular = GoogleFonts.roboto(
+  color: ColorData.kcYellow,
   fontSize: 16,
   fontWeight: FontWeight.w400,
 );

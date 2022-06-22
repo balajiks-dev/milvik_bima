@@ -21,7 +21,7 @@ class CommonDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: ColorData.kcPrimaryColor,
+      backgroundColor: ColorData.kcPrimaryDarkColor,
       // Add a ListView to the drawer. This ensures the user can scroll
       // through the options in the drawer if there isn't enough vertical
       // space to fit everything.
@@ -33,7 +33,7 @@ class CommonDrawer extends StatelessWidget {
             height: screenHeight(context) * 0.3,
             child: DrawerHeader(
               decoration:
-              const BoxDecoration(color: ColorData.kcGreyShade1),
+              const BoxDecoration(color: ColorData.kcWhite),
               child: Column(
                 children: [
                   Image.asset(
@@ -43,21 +43,21 @@ class CommonDrawer extends StatelessWidget {
                   ),
                   //These can go here or below the header with the same background color
                   Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
+                    padding: const EdgeInsets.only(top: 15.0),
                     child: Text(
                       'Admin',
-                      style: ktsFontStyle14RegularBlack,
+                      style: ktsFontStyle14SemiBoldBlack,
                     ),
                   ),
                 ],
               ),
             ),
           ),
-          const Divider(),
           ListTile(
+            leading: const Icon(Icons.logout, color: ColorData.kcRedColor,),
             title: Text(
               AppStrings.logout,
-              style: ktsFontStyle14White,
+              style: ktsFontStyle16SemiBoldWhite,
             ),
             onTap: () async {
               SPUtil.clear();

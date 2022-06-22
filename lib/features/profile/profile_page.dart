@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:milvik_bima/features/profile/bloc/profile_bloc.dart';
 import 'package:milvik_bima/features/profile/bloc/profile_event.dart';
 import 'package:milvik_bima/model/doctors_response_model.dart';
+import 'package:milvik_bima/shared_widgets/custom_date_picker.dart';
 import 'package:milvik_bima/shared_widgets/loading_indicator.dart';
 import 'package:milvik_bima/utils/colors.dart';
 import 'package:milvik_bima/utils/text_styles.dart';
@@ -28,6 +29,9 @@ class ProfilePage extends StatelessWidget {
   TextEditingController bloodGroupController = TextEditingController();
   TextEditingController heightController = TextEditingController();
   TextEditingController weightController = TextEditingController();
+  int birthDay = 1;
+  int birthMonth = 1;
+  int birthYear = 1900;
 
   @override
   Widget build(BuildContext context) {
@@ -63,19 +67,27 @@ class ProfilePage extends StatelessWidget {
                 weightController.text = doctorsResponseModel!.weight;
                 contactNumberController.text =
                     doctorsResponseModel!.primaryContactNo;
+                bloodGroupController.text = doctorsResponseModel!.bloodGroupName;
+                birthDay = doctorsResponseModel!.birthDay;
+                birthMonth = doctorsResponseModel!.birthMonth;
+                birthYear = doctorsResponseModel!.birthYear;
               } else if (state is EditProfileState) {
                 isEditProfile = state.selected;
               } else if (state is UpdateProfileSuccessState) {
                 isEditProfile = !isEditProfile;
                 BlocProvider.of<ProfileBloc>(context)
                     .add(InitialProfileEvent(index: selectedIndex));
+              } else if (state is DateofBirthChangeState){
+                birthDay = state.birthDay;
+                birthMonth = state.birthMonth;
+                birthYear = state.birthYear;
               }
             },
             child: BlocBuilder<ProfileBloc, ProfileState>(
               builder: (context, state) {
                 return doctorsResponseModel != null
                     ? SingleChildScrollView(
-                      child: Stack(
+                        child: Stack(
                           alignment: Alignment.center,
                           children: <Widget>[
                             Column(
@@ -106,7 +118,7 @@ class ProfilePage extends StatelessWidget {
                                         showEditProfileButtonView(context,
                                             isEditProfile, selectedIndex),
                                         verticalSpaceTiny,
-                                        showProfileView(isEditProfile),
+                                        showProfileView(isEditProfile, context),
                                       ],
                                     ),
                                   ),
@@ -127,38 +139,41 @@ class ProfilePage extends StatelessWidget {
                                   child: doctorsResponseModel!.profilePic
                                           .contains("http")
                                       ? SizedBox(
-                                    height: 85,
-                                    width: 85,
-                                        child: CachedNetworkImage(
-                                            imageUrl:
-                                                doctorsResponseModel!.profilePic,
-                                            fit: BoxFit.cover,
-                                            placeholder: (context, url) {
-                                              return Container(
-                                                color: ColorData.kcWhite,
-                                                child: const Padding(
-                                                  padding: EdgeInsets.all(8.0),
-                                                  child: Icon(
-                                                    Icons.person,
-                                                    size: 50,
+                                          height: 85,
+                                          width: 85,
+                                          child: CachedNetworkImage(
+                                              imageUrl: doctorsResponseModel!
+                                                  .profilePic,
+                                              fit: BoxFit.cover,
+                                              placeholder: (context, url) {
+                                                return Container(
+                                                  color: ColorData.kcWhite,
+                                                  child: const Padding(
+                                                    padding:
+                                                        EdgeInsets.all(8.0),
+                                                    child: Icon(
+                                                      Icons.person,
+                                                      size: 50,
+                                                    ),
                                                   ),
-                                                ),
-                                              );
-                                            },
-                                            errorWidget: (context, url, error) {
-                                              return const Icon(
-                                                Icons.person,
-                                                size: 50,
-                                              );
-                                            }),
-                                      )
+                                                );
+                                              },
+                                              errorWidget:
+                                                  (context, url, error) {
+                                                return const Icon(
+                                                  Icons.person,
+                                                  size: 50,
+                                                );
+                                              }),
+                                        )
                                       : SizedBox(
-                                    height: 85,
-                                        width: 85,
-                                        child: Image.file(
-                                            File(doctorsResponseModel!.profilePic),
-                                            fit: BoxFit.cover),
-                                      ),
+                                          height: 85,
+                                          width: 85,
+                                          child: Image.file(
+                                              File(doctorsResponseModel!
+                                                  .profilePic),
+                                              fit: BoxFit.cover),
+                                        ),
                                 ),
                               ),
                             ),
@@ -177,7 +192,7 @@ class ProfilePage extends StatelessWidget {
                             ),
                           ],
                         ),
-                    )
+                      )
                     : Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -224,7 +239,8 @@ class ProfilePage extends StatelessWidget {
                 ListTile(
                     leading: const Icon(Icons.photo_library,
                         color: ColorData.kcPrimaryColor),
-                    title: Text(AppStrings.gallery, style: ktsFontStyle14PrimaryRegular),
+                    title: Text(AppStrings.gallery,
+                        style: ktsFontStyle14PrimaryRegular),
                     onTap: () {
                       _imgFromGallery(context);
                       Navigator.of(context).pop();
@@ -232,7 +248,8 @@ class ProfilePage extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.photo_camera,
                       color: ColorData.kcPrimaryColor),
-                  title: Text(AppStrings.camera, style: ktsFontStyle14PrimaryRegular),
+                  title: Text(AppStrings.camera,
+                      style: ktsFontStyle14PrimaryRegular),
                   onTap: () {
                     _imgFromCamera(context);
                     Navigator.of(context).pop();
@@ -287,7 +304,12 @@ class ProfilePage extends StatelessWidget {
                   gender: genderController.text,
                   contactNumber: contactNumberController.text,
                   height: heightController.text,
-                  weight: weightController.text),
+                  weight: weightController.text,
+                bloodGroupName: bloodGroupController.text,
+                birthDay: birthDay,
+                birthMonth: birthMonth,
+                birthYear: birthYear
+              ),
             );
           } else {
             BlocProvider.of<ProfileBloc>(context)
@@ -305,7 +327,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  showProfileView(bool isEditProfile) {
+  showProfileView(bool isEditProfile, BuildContext context) {
     return Container(
       color: ColorData.kcGreyBackground,
       child: Column(
@@ -343,7 +365,7 @@ class ProfilePage extends StatelessWidget {
                 enabledBorder: InputBorder.none,
                 suffixIcon: null,
                 contentPadding: const EdgeInsets.all(15.0),
-                labelStyle: ktsFontStyle16Regular,
+                labelStyle: ktsFontStyle16RegularGrawy,
               ),
             ),
           ),
@@ -370,7 +392,7 @@ class ProfilePage extends StatelessWidget {
                 enabledBorder: InputBorder.none,
                 suffixIcon: null,
                 contentPadding: const EdgeInsets.all(15.0),
-                labelStyle: ktsFontStyle16Regular,
+                labelStyle: ktsFontStyle16RegularGrawy,
               ),
             ),
           ),
@@ -397,7 +419,7 @@ class ProfilePage extends StatelessWidget {
                 enabledBorder: InputBorder.none,
                 suffixIcon: null,
                 contentPadding: const EdgeInsets.all(15.0),
-                labelStyle: ktsFontStyle16Regular,
+                labelStyle: ktsFontStyle16RegularGrawy,
               ),
             ),
           ),
@@ -424,68 +446,223 @@ class ProfilePage extends StatelessWidget {
                 enabledBorder: InputBorder.none,
                 suffixIcon: null,
                 contentPadding: const EdgeInsets.all(15.0),
-                labelStyle: ktsFontStyle16Regular,
+                labelStyle: ktsFontStyle16RegularGrawy,
               ),
             ),
           ),
           verticalSpaceTiny,
-
-          // Row(
-          //   children: [
-          //     Container(
-          //       margin: const EdgeInsets.all(10.0),
-          //       decoration: BoxDecoration(
-          //         borderRadius: BorderRadius.circular(10.0),
-          //         color: ColorData.kcWhite,
-          //       ),
-          //       child: FormBuilderTextField(
-          //         readOnly: !isEditProfile,
-          //         name: "Profile Height",
-          //         controller: heightController,
-          //         keyboardType: TextInputType.text,
-          //         textInputAction: TextInputAction.done,
-          //         enableInteractiveSelection: false,
-          //         maxLines: 1,
-          //         style: ktsFontStyle16Regular,
-          //         decoration: InputDecoration(
-          //           enabled: true,
-          //           labelText: AppStrings.lastName,
-          //           focusedBorder: InputBorder.none,
-          //           enabledBorder: InputBorder.none,
-          //           suffixIcon: null,
-          //           contentPadding: const EdgeInsets.all(15.0),
-          //           labelStyle: ktsFontStyle16Regular,
-          //         ),
-          //       ),
-          //     ),
-          //     Container(
-          //       margin: const EdgeInsets.all(10.0),
-          //       decoration: BoxDecoration(
-          //         borderRadius: BorderRadius.circular(10.0),
-          //         color: ColorData.kcWhite,
-          //       ),
-          //       child: FormBuilderTextField(
-          //         readOnly: !isEditProfile,
-          //         name: "Profile Weight",
-          //         controller: weightController,
-          //         keyboardType: TextInputType.text,
-          //         textInputAction: TextInputAction.done,
-          //         enableInteractiveSelection: false,
-          //         maxLines: 1,
-          //         style: ktsFontStyle16Regular,
-          //         decoration: InputDecoration(
-          //           enabled: true,
-          //           labelText: AppStrings.lastName,
-          //           focusedBorder: InputBorder.none,
-          //           enabledBorder: InputBorder.none,
-          //           suffixIcon: null,
-          //           contentPadding: const EdgeInsets.all(15.0),
-          //           labelStyle: ktsFontStyle16Regular,
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          // ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(AppStrings.dateOfBirth, style: ktsFontStyle16RegularGrawy,),
+              ),
+              verticalSpaceTiny,
+              DropdownDatePicker(
+                isEditable: isEditProfile,
+                textStyle: ktsFontStyle16Regular,
+                boxDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                ), // optional
+                isDropdownHideUnderline: true,  // optional
+                isFormValidator: true, // optional
+                startYear: 1900, // optional
+                endYear: 2022, // optional
+                width: 10, // optional
+                selectedDay: birthDay, // optional
+                selectedMonth: birthMonth, // optional
+                selectedYear: birthYear, // optional
+                onChangedDay: (value) {
+                  print('onChangedDay: $value');
+                  BlocProvider.of<ProfileBloc>(context).add(
+                    DateofBirthChangeEvent(
+                        birthDay: value != null && value.isNotEmpty ? int.parse(value) : 1,
+                      birthYear: birthYear,
+                      birthMonth: birthMonth
+                    ),
+                  );
+                },
+                isExpanded: false, // optional default is true
+                onChangedMonth: (value) {
+                  print('onChangedMonth: $value');
+                  BlocProvider.of<ProfileBloc>(context).add(
+                    DateofBirthChangeEvent(
+                        birthDay: birthDay,
+                        birthMonth: value != null && value.isNotEmpty ? int.parse(value) : 1,
+                        birthYear: birthYear
+                    ),
+                  );
+                },
+                onChangedYear: (value) {
+                  print('onChangedYear: $value');
+                  BlocProvider.of<ProfileBloc>(context).add(
+                    DateofBirthChangeEvent(
+                        birthDay: birthDay,
+                        birthMonth: birthMonth,
+                        birthYear: value != null && value.isNotEmpty ? int.parse(value) : 1900,
+                    ),
+                  );
+                  },
+              ),
+            ],
+          ),
+          verticalSpaceTiny,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: Container(
+                    margin: const EdgeInsets.all(5.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5.0),
+                      color: ColorData.kcWhite,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 5.0, bottom: 10.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.bloodtype, color: ColorData.kcGrayShade_1,),
+                                Expanded(
+                                  child: Text(
+                                    AppStrings.bloodGroup,
+                                    maxLines: 2,
+                                    style: ktsFontStyle12RegularGrawy,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          isEditProfile
+                              ? Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 20.0, left: 10, right: 10),
+                                  child: TextField(
+                                    controller: bloodGroupController,
+                                    style: ktsFontStyle16Regular,
+                                    decoration: InputDecoration(
+                                      labelStyle: ktsFontStyle16Regular,
+                                      enabledBorder: const UnderlineInputBorder(
+                                        borderSide: BorderSide(color: ColorData.kcPrimaryDarkColor),
+                                      ),
+                                      focusedBorder: const UnderlineInputBorder(
+                                        borderSide: BorderSide(color: ColorData.kcPrimaryDarkColor),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Text(bloodGroupController.text, style: ktsFontStyle16Regular),
+                        ],
+                      ),
+                    )),
+              ),
+              Expanded(
+                child: Container(
+                    margin: const EdgeInsets.all(5.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5.0),
+                      color: ColorData.kcWhite,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 5.0, bottom: 10.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.height_outlined, color: ColorData.kcGrayShade_1,),
+                                Expanded(
+                                  child: Text(AppStrings.height, maxLines: 1,
+                                    style: ktsFontStyle12RegularGrawy,
+                                    overflow: TextOverflow.ellipsis,),
+                                ),
+                              ],
+                            ),
+                          ),
+                          isEditProfile
+                              ? Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 20.0, left: 10, right: 10),
+                            child: TextField(
+                              controller: heightController,
+                              style: ktsFontStyle16Regular,
+                              decoration: InputDecoration(
+                                labelStyle: ktsFontStyle16Regular,
+                                enabledBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(color: ColorData.kcPrimaryDarkColor),
+                                ),
+                                focusedBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(color: ColorData.kcPrimaryDarkColor),
+                                ),
+                              ),
+                            ),
+                          )
+                              : Text(heightController.text, style: ktsFontStyle16Regular,),
+                          verticalSpaceSmall,
+                        ],
+                      ),
+                    )),
+              ),
+              Expanded(
+                child: Container(
+                    margin: const EdgeInsets.all(5.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5.0),
+                      color: ColorData.kcWhite,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 5.0, bottom: 10.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.line_weight, color: ColorData.kcGrayShade_1,),
+                                Expanded(
+                                  child: Text(AppStrings.weight, maxLines: 1,
+                                    style: ktsFontStyle12RegularGrawy,
+                                    overflow: TextOverflow.ellipsis,),
+                                ),
+                              ],
+                            ),
+                          ),
+                          isEditProfile
+                              ? Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 20.0, left: 10, right: 10),
+                                  child: TextField(
+                                    controller: weightController,
+                                    style: ktsFontStyle16Regular,
+                                    decoration: InputDecoration(
+                                      labelStyle: ktsFontStyle16Regular,
+                                      enabledBorder: const UnderlineInputBorder(
+                                        borderSide: BorderSide(color: ColorData.kcPrimaryDarkColor),
+                                      ),
+                                      focusedBorder: const UnderlineInputBorder(
+                                        borderSide: BorderSide(color: ColorData.kcPrimaryDarkColor),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Text(weightController.text, style: ktsFontStyle16Regular,),
+                          verticalSpaceSmall,
+                        ],
+                      ),
+                    )),
+              ),
+            ],
+          ),
+          verticalSpaceMedium
         ],
       ),
     );

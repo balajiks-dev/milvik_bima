@@ -52,7 +52,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           languagesKnown: doctorsList[event.index].languagesKnown,
           gender: event.gender,
           height: event.height,
-          weight: event.weight);
+          weight: event.weight,
+          bloodGroupName: event.bloodGroupName, birthDay: event.birthDay, birthMonth: event.birthMonth, birthYear: event.birthYear);
       SPUtil.clearString(KeyStrings.kDoctorsList);
       SPUtil.putString(KeyStrings.kDoctorsList, jsonEncode(doctorsList));
       yield DismissProgressBar();
@@ -92,12 +93,19 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           gender: doctorsList[event.index].gender,
           height: doctorsList[event.index].height,
           weight: doctorsList[event.index].weight,
-          imageEdited: true
+          imageEdited: true, bloodGroupName: doctorsList[event.index].bloodGroupName,
+        birthDay: doctorsList[event.index].birthDay,
+        birthMonth: doctorsList[event.index].birthMonth,
+        birthYear: doctorsList[event.index].birthYear
       );
       SPUtil.clearString(KeyStrings.kDoctorsList);
       SPUtil.putString(KeyStrings.kDoctorsList, jsonEncode(doctorsList));
       yield DismissProgressBar();
       yield UpdateProfileSuccessState();
+    } else if (event is DateofBirthChangeEvent){
+      yield ShowProgressBar();
+      yield DismissProgressBar();
+      yield DateofBirthChangeState(birthDay: event.birthDay, birthMonth: event.birthMonth, birthYear: event.birthYear);
     }
   }
 }

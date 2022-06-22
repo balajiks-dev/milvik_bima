@@ -15,6 +15,10 @@ class DoctorsResponseModel {
   final String height;
   final String weight;
   final bool imageEdited;
+  final String bloodGroupName;
+  final int birthDay;
+  final int birthMonth;
+  final int birthYear;
 
   DoctorsResponseModel(
       {required this.id,
@@ -32,6 +36,10 @@ class DoctorsResponseModel {
       required this.gender,
       required this.height,
       required this.weight,
+        required this.bloodGroupName,
+        required this.birthDay,
+        required this.birthMonth,
+        required this.birthYear,
       this.imageEdited = false});
 
   factory DoctorsResponseModel.fromJson(Map<String, dynamic> json) {
@@ -51,6 +59,10 @@ class DoctorsResponseModel {
         gender: json['gender'] ?? "",
         height: json['height'] ?? "",
         weight: json['weight'] ?? "",
+        bloodGroupName: json['bloodGroupName'] ?? "",
+        birthDay: json['birthDay'] ?? 1,
+        birthMonth: json['birthMonth'] ?? 1,
+        birthYear: json['birthYear'] ?? 1900,
         imageEdited: json['imageEdited'] ?? false);
   }
 
@@ -72,6 +84,10 @@ class DoctorsResponseModel {
     data['height'] = height;
     data['weight'] = weight;
     data['imageEdited'] = imageEdited;
+    data['bloodGroupName'] = bloodGroupName;
+    data['birthMonth'] = birthMonth;
+    data['birthDay'] = birthDay;
+    data['birthYear'] = birthYear;
     return data;
   }
 }

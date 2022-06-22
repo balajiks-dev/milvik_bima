@@ -4,7 +4,7 @@ class AppStrings {
   static const String loginSuccess = "Login Success";
   static const String login = "Login";
   static const String noDataFound = "No Data Found";
-  static const String logout = "Logout";
+  static const String logout = "LOGOUT";
   static const String tryAgain = "Try Again";
 
 
@@ -44,4 +44,7 @@ class AppStrings {
   static const String gallery = "GALLERY";
   static const String camera = "CAMERA";
   static const String imageNotSelected = "Image not selected";
+  static const String day = "DAY";
+  static const String month = "MONTH";
+  static const String year = "YEAR";
 }
