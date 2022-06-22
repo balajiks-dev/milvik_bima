@@ -121,14 +121,18 @@ class DashboardPage extends StatelessWidget {
                                       children: [
                                         InkWell(
                                             onTap: () {
-                                              Navigator.push(
+                                            Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) =>
                                                       ProfilePage(
                                                           selectedIndex: index),
                                                 ),
+                                              ).then((value) {
+                                              BlocProvider.of<DashboardBloc>(context).add(
+                                                InitialDashboardEvent(),
                                               );
+                                            });
                                             },
                                             child: showDoctorCardView(
                                                 doctorsList[index])),

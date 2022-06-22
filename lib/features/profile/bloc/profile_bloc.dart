@@ -30,8 +30,35 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     }
     else if (event is UpdateProfileEvent) {
       yield ShowProgressBar();
+      String doctorsListString = SPUtil.getString(KeyStrings.kDoctorsList);
+      List<DoctorsResponseModel> doctorsList = <DoctorsResponseModel>[];
+      jsonDecode(doctorsListString).forEach(
+              (f) => doctorsList.add(DoctorsResponseModel.fromJson(f)));
+      doctorsList.sort((a,b) => b.rating.compareTo(a.rating));
+      doctorsList[event.index] = DoctorsResponseModel(
+          id: doctorsList[event.index].id,
+          firstName: event.firstName,
+          lastName: event.lastName,
+          profilePic: doctorsList[event.index].profilePic,
+          favorite: doctorsList[event.index].favorite,
+          primaryContactNo: event.contactNumber,
+          rating: doctorsList[event.index].rating,
+          emailAddress: doctorsList[event.index].emailAddress,
+          qualification: doctorsList[event.index].qualification,
+          description: doctorsList[event.index].description,
+          specialization: doctorsList[event.index].specialization,
+          languagesKnown: doctorsList[event.index].languagesKnown,
+          gender: event.gender,
+          height: event.height,
+          weight: event.weight);
+      SPUtil.clear();
+      SPUtil.putString(KeyStrings.kDoctorsList, jsonEncode(doctorsList));
       yield DismissProgressBar();
       yield UpdateProfileSuccessState();
+    } else if (event is EditProfileEvent){
+      yield ShowProgressBar();
+      yield DismissProgressBar();
+      yield EditProfileState(selected: event.selected);
     }
   }
 }

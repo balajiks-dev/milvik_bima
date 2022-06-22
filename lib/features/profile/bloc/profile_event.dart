@@ -14,8 +14,21 @@ class InitialProfileEvent extends ProfileEvent {
 
 class UpdateProfileEvent extends ProfileEvent {
   final int index;
-  final DoctorsResponseModel doctor;
-  const UpdateProfileEvent({required this.index, required this.doctor});
+  final String firstName;
+  final String lastName;
+  final String gender;
+  final String contactNumber;
+  final String height;
+  final String weight;
+  const UpdateProfileEvent({required this.index, required this.firstName, required this.lastName, required this.contactNumber, required this.gender, required this.height, required this.weight});
+
+  @override
+  List<Object> get props => [];
+}
+
+class EditProfileEvent extends ProfileEvent {
+  final bool selected;
+  const EditProfileEvent({required this.selected});
 
   @override
   List<Object> get props => [];

@@ -53,6 +53,7 @@ class ColorData {
   static const Color kcLightGreyShade1 = Color(0xFFB7B7B7);
   static const Color kcLightGreyShade = Color(0xFF9D9D9D);
   static const Color kcGreyBorder = Color(0xFFD5D5D5);
+  static const Color kcGreyBackground = Color.fromRGBO(247, 249, 250, 1);
 
   static const Color kcLightGray = Color(0xFFCCCCCC);
   static const Color kcLightGrayShade = Color(0xFFDDDDDD);

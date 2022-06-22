@@ -11,6 +11,9 @@ class DoctorsResponseModel {
   final String description;
   final String specialization;
   final String languagesKnown;
+  final String gender;
+  final String height;
+  final String weight;
 
   DoctorsResponseModel(
       {required this.id,
@@ -24,7 +27,11 @@ class DoctorsResponseModel {
         required this.qualification,
         required this.description,
         required this.specialization,
-        required this.languagesKnown});
+        required this.languagesKnown,
+      required this.gender,
+        required this.height,
+        required this.weight
+      });
 
   factory DoctorsResponseModel.fromJson(Map<String, dynamic> json) {
     return DoctorsResponseModel(
@@ -39,7 +46,10 @@ class DoctorsResponseModel {
     qualification : json['qualification'],
     description : json['description'],
     specialization : json['specialization'],
-        languagesKnown : json['languagesKnown']
+        languagesKnown : json['languagesKnown'],
+      gender: json['gender'] ?? "",
+      height: json['height'] ?? "",
+      weight: json['weight'] ?? ""
     );
   }
 
@@ -57,6 +67,9 @@ class DoctorsResponseModel {
     data['description'] = description;
     data['specialization'] = specialization;
     data['languagesKnown'] = languagesKnown;
+    data['gender'] = gender;
+    data['height'] = height;
+    data['weight'] = weight;
     return data;
   }
 }

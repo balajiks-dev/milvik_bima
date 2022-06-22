@@ -47,3 +47,11 @@ class InitialProfileFailureState extends ProfileState {
   @override
   List<Object> get props => [error];
 }
+
+class EditProfileState extends ProfileState {
+  final bool selected;
+  const EditProfileState({required this.selected});
+
+  @override
+  List<Object> get props => [];
+}

@@ -23,6 +23,7 @@ class AppStrings {
 
   //Profile
   static const String editProfile = "EDIT PROFILE";
+  static const String saveProfile = "SAVE PROFILE";
   static const String personalDetails = "PERSONAL DETAILS";
   static const String firstName = "FIRST NAME";
   static const String lastName = "LAST NAME";
