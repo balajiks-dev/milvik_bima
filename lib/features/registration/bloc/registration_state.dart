@@ -62,3 +62,14 @@ class ClearButtonPressedState extends RegistrationState {
   @override
   List<Object> get props => [];
 }
+
+class TermsConditionState extends RegistrationState {
+  final bool isTermsChecked;
+
+  const TermsConditionState({
+    required this.isTermsChecked
+  });
+
+  @override
+  List<Object> get props => [];
+}

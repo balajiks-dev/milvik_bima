@@ -5,7 +5,7 @@ import 'package:milvik_bima/features/dashboard/dashboard_page.dart';
 import 'package:milvik_bima/features/registration/bloc/registration_bloc.dart';
 import 'package:milvik_bima/features/registration/bloc/registration_event.dart';
 import 'package:milvik_bima/features/registration/bloc/registration_state.dart';
-import 'package:milvik_bima/features/registration/otp_screen.dart';
+import 'package:milvik_bima/features/registration/terms_condition.dart';
 import 'package:milvik_bima/shared_widgets/loading_indicator.dart';
 import 'package:milvik_bima/shared_widgets/snack_bar.dart';
 import 'package:milvik_bima/utils/colors.dart';
@@ -112,7 +112,8 @@ class RegistrationPage extends StatelessWidget {
                                       hintStyle: ktsFontStyle20SemiBoldYellow,
                                       labelStyle: ktsFontStyle20SemiBoldYellow),
                                   onChanged: (phone) {
-                                    mobileNumber = phone.completeNumber;
+                                    mobileNumber = "${phone.countryCode} ${phone.number}";
+                                   // mobileNumber = phone.completeNumber;
 
                                     print(phone.completeNumber);
                                   },
@@ -148,11 +149,11 @@ class RegistrationPage extends StatelessWidget {
                       child: TextButton(
                         onPressed: () {
                           formKey.currentState?.validate();
-                          // BlocProvider.of<RegistrationBloc>(context).add(
-                          //     RegistrationButtonPressed(
-                          //         mobileNumber: mobileNumber, context: context));
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => OtpPage()));
+                          BlocProvider.of<RegistrationBloc>(context).add(
+                              RegistrationButtonPressed(
+                                  mobileNumber: mobileNumber, context: context));
+                          // Navigator.push(context,
+                          //     MaterialPageRoute(builder: (context) => OtpPage()));
                         },
                         style: TextButton.styleFrom(
                           backgroundColor: ColorData.kcGreenButton,

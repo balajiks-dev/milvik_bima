@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:milvik_bima/features/registration/bloc/registration_bloc.dart';
 import 'package:milvik_bima/features/registration/bloc/registration_event.dart';
 import 'package:milvik_bima/features/registration/bloc/registration_state.dart';
+import 'package:milvik_bima/features/registration/terms_condition.dart';
 import 'package:milvik_bima/shared_widgets/loading_indicator.dart';
 import 'package:milvik_bima/shared_widgets/snack_bar.dart';
 import 'package:milvik_bima/utils/colors.dart';
@@ -14,8 +15,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import '../dashboard/dashboard_page.dart';
 
 class OtpPage extends StatelessWidget {
-  const OtpPage({Key? key}) : super(key: key);
-
+  bool isTermsSelected = false;
   @override
   Widget build(BuildContext context) {
     TextEditingController otpTextEditingController = TextEditingController();
@@ -33,6 +33,9 @@ class OtpPage extends StatelessWidget {
             } else if (state is ShowProgressBar) {
               DialogBuilder(context).showLoadingIndicator();
             } else if (state is OtpSuccessState) {
+              ScaffoldMessenger.of(context).showSnackBar(snackBarWidget(
+               AppStrings.loginSuccessful,
+              ));
               Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
@@ -41,6 +44,8 @@ class OtpPage extends StatelessWidget {
             } else if (state is OtpFailureState) {
               ScaffoldMessenger.of(context)
                   .showSnackBar(snackBarWidget(state.error));
+            } else if (state is TermsConditionState){
+              isTermsSelected = state.isTermsChecked;
             }
           },
           child: BlocBuilder<RegistrationBloc, RegistrationState>(
@@ -60,7 +65,7 @@ class OtpPage extends StatelessWidget {
                     child: TextButton(
                       onPressed: () {
                         BlocProvider.of<RegistrationBloc>(context).add(
-                            OtpButtonPressed(otp: otpTextEditingController.text));
+                            OtpButtonPressed(otp: otpTextEditingController.text, context: context, isTermsSelected: isTermsSelected));
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: ColorData.kcGreenButton,
@@ -156,10 +161,58 @@ class OtpPage extends StatelessWidget {
                       return true;
                     },
                   )),
+              termsConditionWidget(context),
+
             ],
           ),
         ),
       ),
     );
   }
+
+  Widget termsConditionWidget(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.only(top: 25.0),
+        child: Row(
+          children: [
+            Checkbox(
+                checkColor: ColorData.kcWhite,
+                activeColor: ColorData.kcGreenButton,
+                value: isTermsSelected,
+                onChanged: (newValue) async {
+                  FocusScope.of(context).unfocus();
+                  BlocProvider.of<RegistrationBloc>(context).add(
+                      TermsConditionEvent(isTermsChecked: !isTermsSelected));
+                }),
+            Expanded(
+              child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TermsAndConditionScreen()));
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'I agree to the ',
+                      style: ktsFontStyle16RegularWhite,
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: 'Terms of Service, ',
+                            style: ktsFontStyle16RegularYellow),
+                        TextSpan(
+                            text: 'Privacy Policy ',
+                            style: ktsFontStyle16RegularYellow),
+                        const TextSpan(text: '&'),
+                        TextSpan(
+                            text: ' Refund Policy. ',
+                            style: ktsFontStyle16RegularYellow),
+                      ],
+                    ),
+                  )),
+            )
+          ],
+        ));
+  }
+
 }

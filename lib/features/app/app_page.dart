@@ -29,8 +29,8 @@ class App extends StatelessWidget {
               listener: (BuildContext context, state) {
                 switch (state.status) {
                   case AuthenticationStatus.authenticated:
-                    final int userRoleId =
-                    SPUtil.getInt(KeyStrings.kLoginToken);
+                    final String userId =
+                    SPUtil.getString(KeyStrings.kUserId);
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(

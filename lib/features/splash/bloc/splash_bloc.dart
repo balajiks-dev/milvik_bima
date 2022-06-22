@@ -27,7 +27,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
       await initializeFirebaseCrashlytics();
       await Future.delayed(const Duration(seconds: 3));
       await SPUtil.getInstance();
-      if (SPUtil.getString(KeyStrings.kLoginToken).isNotEmpty) {
+      if (SPUtil.getString(KeyStrings.kUserId).isNotEmpty) {
         authenticationBloc.add(const AuthenticationStatusChanged(
             AuthenticationStatus.authenticated));
       } else {

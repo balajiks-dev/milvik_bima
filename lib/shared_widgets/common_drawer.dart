@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:milvik_bima/features/registration/registration.dart';
 import 'package:milvik_bima/utils/assets.dart';
@@ -58,8 +59,10 @@ class CommonDrawer extends StatelessWidget {
               AppStrings.logout,
               style: ktsFontStyle14White,
             ),
-            onTap: () {
+            onTap: () async {
               SPUtil.clear();
+              FirebaseAuth.instance.currentUser!.delete();
+              await FirebaseAuth.instance.signOut();
               Navigator.push(
                 context,
                 MaterialPageRoute(

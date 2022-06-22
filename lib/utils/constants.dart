@@ -11,8 +11,12 @@ class AppStrings {
   //API Error
   static const String checkInternet = "Check Internet";
   static const String enterPhoneNumber = "Enter Phone Number";
+  static const String enterValidPhoneNumber = "Enter Valid Phone Number";
   static const String enterMobileNumber = "ENTER YOUR MOBILE NUMBER";
   static const String phoneNumber = "Phone Number";
+  static const String checkTermsAndCondition = "Check Terms & Condition";
+  static const String enterOTP = "Enter OTP";
+  static const String enterValidOTP = "Enter Valid OTP";
 
 
   //Registration
@@ -20,6 +24,8 @@ class AppStrings {
   static const String continueText = "Continue";
   static const String enterVerificationCode = "ENTER VERIFICATION CODE";
   static const String invalidOTP = "Invalid OTP";
+  static const String loginSuccessful = "Login Successful";
+  static const String otpSentSuccessfully = "OTP Sent to your phone number successfully!";
 
   //Profile
   static const String editProfile = "EDIT PROFILE";

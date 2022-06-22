@@ -33,6 +33,7 @@ dependencies:
   intl_phone_field:
   pin_code_fields: ^7.3.0
   flutter_form_builder: ^7.3.1
+  webview_flutter_plus:
 
 dev_dependencies:
   flutter_test:
@@ -45,6 +46,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/index.html
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -36,9 +36,25 @@ class ClearButtonPressed extends RegistrationEvent {
 
 class OtpButtonPressed extends RegistrationEvent {
   final String otp;
+  final BuildContext context;
+  final bool isTermsSelected;
+
 
   const OtpButtonPressed({
     required this.otp,
+    required this.context,
+    required this.isTermsSelected
+  });
+
+  @override
+  List<Object> get props => [];
+}
+
+class TermsConditionEvent extends RegistrationEvent {
+  final bool isTermsChecked;
+
+  const TermsConditionEvent({
+    required this.isTermsChecked
   });
 
   @override

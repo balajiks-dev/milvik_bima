@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "595320667703-ij9qcolplgel34cjuofsedtv4bcbuvd1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.milvik.bima",
+            "certificate_hash": "595137a60bb1544ae6e9c5577307d7656f8cb483"
+          }
+        },
+        {
           "client_id": "595320667703-udo0he9070njtm84c0trbloushq1jvu3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
