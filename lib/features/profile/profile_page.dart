@@ -167,9 +167,15 @@ class ProfilePage extends StatelessWidget {
                                               },
                                               errorWidget:
                                                   (context, url, error) {
-                                                return const Icon(
-                                                  Icons.person,
-                                                  size: 50,
+                                                return Container(
+                                                  color: ColorData.kcWhite,
+                                                  child: const Padding(
+                                                    padding:  EdgeInsets.all(8.0),
+                                                    child:  Icon(
+                                                      Icons.person,
+                                                      size: 50,
+                                                    ),
+                                                  ),
                                                 );
                                               }),
                                         )
@@ -250,16 +256,7 @@ class ProfilePage extends StatelessWidget {
                     title: Text(AppStrings.gallery,
                         style: ktsFontStyle14PrimaryRegular),
                     onTap: () {
-                      final pickedFile = _imgFromGallery(context);
-                      if (pickedFile != null) {
-                        BlocProvider.of<ProfileBloc>(context).add(
-                            ProfilePictureAddEvent(
-                                image: File(pickedFile.path),
-                                index: selectedIndex));
-                      } else {
-                        BlocProvider.of<ProfileBloc>(context)
-                            .add(ProfilePictureNotAddEvent());
-                      }
+                      _imgFromGallery(context);
                       Navigator.of(context).pop();
                     }),
                 ListTile(
@@ -268,16 +265,7 @@ class ProfilePage extends StatelessWidget {
                   title: Text(AppStrings.camera,
                       style: ktsFontStyle14PrimaryRegular),
                   onTap: () {
-                    final pickedFile = _imgFromCamera(context);
-                    if (pickedFile != null) {
-                      BlocProvider.of<ProfileBloc>(context).add(
-                          ProfilePictureAddEvent(
-                              image: File(pickedFile.path),
-                              index: selectedIndex));
-                    } else {
-                      BlocProvider.of<ProfileBloc>(context)
-                          .add(ProfilePictureNotAddEvent());
-                    }
+                    _imgFromCamera(context);
                     Navigator.of(context).pop();
                   },
                 ),
@@ -289,13 +277,34 @@ class ProfilePage extends StatelessWidget {
 
   _imgFromCamera(BuildContext context) async {
     final ImagePicker picker = ImagePicker();
-    return await picker.pickImage(source: ImageSource.camera, imageQuality: 50);
+    final pickedFile = await picker.pickImage(source: ImageSource.camera, imageQuality: 50);
+
+    if (pickedFile != null) {
+      BlocProvider.of<ProfileBloc>(context).add(
+          ProfilePictureAddEvent(
+              image: File(pickedFile.path),
+              index: selectedIndex));
+    } else {
+      BlocProvider.of<ProfileBloc>(context)
+          .add(ProfilePictureNotAddEvent());
+    }
+    return pickedFile;
   }
 
   _imgFromGallery(BuildContext context) async {
     final picker = ImagePicker();
-    return await picker.pickImage(
+    final pickedFile = await picker.pickImage(
         source: ImageSource.gallery, imageQuality: 50);
+    if (pickedFile != null) {
+      BlocProvider.of<ProfileBloc>(context).add(
+          ProfilePictureAddEvent(
+              image: File(pickedFile.path),
+              index: selectedIndex));
+    } else {
+      BlocProvider.of<ProfileBloc>(context)
+          .add(ProfilePictureNotAddEvent());
+    }
+    return pickedFile;
   }
 
   showEditProfileButtonView(
