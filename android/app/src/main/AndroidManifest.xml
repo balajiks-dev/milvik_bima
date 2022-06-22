@@ -2,7 +2,7 @@
     package="com.milvik.bima">
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="milvik_bima"
+        android:label="Milvik Bima"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
