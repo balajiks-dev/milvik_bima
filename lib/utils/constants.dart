@@ -41,4 +41,7 @@ class AppStrings {
   static const String bloodGroup = "BLOOD GROUP";
   static const String height = "HEIGHT";
   static const String weight = "WEIGHT";
+  static const String gallery = "GALLERY";
+  static const String camera = "CAMERA";
+  static const String imageNotSelected = "Image not selected";
 }

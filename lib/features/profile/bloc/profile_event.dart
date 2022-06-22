@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:milvik_bima/model/doctors_response_model.dart';
 
@@ -30,6 +32,20 @@ class EditProfileEvent extends ProfileEvent {
   final bool selected;
   const EditProfileEvent({required this.selected});
 
+  @override
+  List<Object> get props => [];
+}
+
+class ProfilePictureAddEvent extends ProfileEvent {
+  final File image;
+  final int index;
+  const ProfilePictureAddEvent({required this.image, required this.index});
+
+  @override
+  List<Object> get props => [];
+}
+
+class ProfilePictureNotAddEvent extends ProfileEvent {
   @override
   List<Object> get props => [];
 }

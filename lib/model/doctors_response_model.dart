@@ -14,43 +14,44 @@ class DoctorsResponseModel {
   final String gender;
   final String height;
   final String weight;
+  final bool imageEdited;
 
   DoctorsResponseModel(
       {required this.id,
-        required this.firstName,
-        required this.lastName,
-        required this.profilePic,
-        required this.favorite,
-        required this.primaryContactNo,
-        required this.rating,
-        required this.emailAddress,
-        required this.qualification,
-        required this.description,
-        required this.specialization,
-        required this.languagesKnown,
+      required this.firstName,
+      required this.lastName,
+      required this.profilePic,
+      required this.favorite,
+      required this.primaryContactNo,
+      required this.rating,
+      required this.emailAddress,
+      required this.qualification,
+      required this.description,
+      required this.specialization,
+      required this.languagesKnown,
       required this.gender,
-        required this.height,
-        required this.weight
-      });
+      required this.height,
+      required this.weight,
+      this.imageEdited = false});
 
   factory DoctorsResponseModel.fromJson(Map<String, dynamic> json) {
     return DoctorsResponseModel(
-        id : json['id'],
-        firstName : json['first_name'],
-        lastName : json['last_name'],
-    profilePic : json['profile_pic'],
-    favorite : json['favorite'],
-    primaryContactNo : json['primary_contact_no'],
-    rating : json['rating'],
-    emailAddress : json['email_address'],
-    qualification : json['qualification'],
-    description : json['description'],
-    specialization : json['specialization'],
-        languagesKnown : json['languagesKnown'],
-      gender: json['gender'] ?? "",
-      height: json['height'] ?? "",
-      weight: json['weight'] ?? ""
-    );
+        id: json['id'],
+        firstName: json['first_name'],
+        lastName: json['last_name'],
+        profilePic: json['profile_pic'],
+        favorite: json['favorite'],
+        primaryContactNo: json['primary_contact_no'],
+        rating: json['rating'],
+        emailAddress: json['email_address'],
+        qualification: json['qualification'],
+        description: json['description'],
+        specialization: json['specialization'],
+        languagesKnown: json['languagesKnown'],
+        gender: json['gender'] ?? "",
+        height: json['height'] ?? "",
+        weight: json['weight'] ?? "",
+        imageEdited: json['imageEdited'] ?? false);
   }
 
   Map<String, dynamic> toJson() {
@@ -70,6 +71,7 @@ class DoctorsResponseModel {
     data['gender'] = gender;
     data['height'] = height;
     data['weight'] = weight;
+    data['imageEdited'] = imageEdited;
     return data;
   }
 }

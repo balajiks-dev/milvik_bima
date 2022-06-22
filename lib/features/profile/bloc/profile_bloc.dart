@@ -53,7 +53,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           gender: event.gender,
           height: event.height,
           weight: event.weight);
-      SPUtil.clear();
+      SPUtil.clearString(KeyStrings.kDoctorsList);
       SPUtil.putString(KeyStrings.kDoctorsList, jsonEncode(doctorsList));
       yield DismissProgressBar();
       yield UpdateProfileSuccessState();
@@ -65,6 +65,39 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       yield ShowProgressBar();
       yield DismissProgressBar();
       yield EditProfileState(selected: event.selected);
+    } else if (event is ProfilePictureNotAddEvent){
+      yield ShowProgressBar();
+      yield DismissProgressBar();
+      yield const InitialProfileFailureState(error: AppStrings.imageNotSelected);
+    } else if (event is ProfilePictureAddEvent){
+      yield ShowProgressBar();
+      String doctorsListString = SPUtil.getString(KeyStrings.kDoctorsList);
+      List<DoctorsResponseModel> doctorsList = <DoctorsResponseModel>[];
+      jsonDecode(doctorsListString).forEach(
+              (f) => doctorsList.add(DoctorsResponseModel.fromJson(f)));
+      doctorsList.sort((a,b) => b.rating.compareTo(a.rating));
+      doctorsList[event.index] = DoctorsResponseModel(
+          id: doctorsList[event.index].id,
+          firstName: doctorsList[event.index].firstName,
+          lastName: doctorsList[event.index].lastName,
+          profilePic: event.image.path,
+          favorite: doctorsList[event.index].favorite,
+          primaryContactNo: doctorsList[event.index].primaryContactNo,
+          rating: doctorsList[event.index].rating,
+          emailAddress: doctorsList[event.index].emailAddress,
+          qualification: doctorsList[event.index].qualification,
+          description: doctorsList[event.index].description,
+          specialization: doctorsList[event.index].specialization,
+          languagesKnown: doctorsList[event.index].languagesKnown,
+          gender: doctorsList[event.index].gender,
+          height: doctorsList[event.index].height,
+          weight: doctorsList[event.index].weight,
+          imageEdited: true
+      );
+      SPUtil.clearString(KeyStrings.kDoctorsList);
+      SPUtil.putString(KeyStrings.kDoctorsList, jsonEncode(doctorsList));
+      yield DismissProgressBar();
+      yield UpdateProfileSuccessState();
     }
   }
 }

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:avatar_view/avatar_view.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -175,16 +178,33 @@ class DashboardPage extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: AvatarView(
-                  radius: 30,
-                  borderColor: ColorData.kcPrimaryDarkColor,
-                  isOnlyText: false,
-                  avatarType: AvatarType.CIRCLE,
-                  backgroundColor: Colors.red,
-                  imagePath:
-                  topRatedDoctorsList[i].profilePic,
-                  placeHolder: const Icon(Icons.person, size: 50,),
-                  errorWidget: const Icon(Icons.person, size: 50,),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: topRatedDoctorsList[i].profilePic
+                      .contains("http")
+                      ? CachedNetworkImage(
+                      imageUrl:
+                      topRatedDoctorsList[i].profilePic,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) {
+                        return const Icon(
+                          Icons.person,
+                          size: 50,
+                        );
+                      },
+                      errorWidget: (context, url, error) {
+                        return const Icon(
+                          Icons.person,
+                          size: 50,
+                        );
+                      })
+                      : SizedBox(
+                    height: 70,
+                    width: 70,
+                    child: Image.file(
+                        File(topRatedDoctorsList[i].profilePic),
+                        fit: BoxFit.cover),
+                  ),
                 ),
               ),
               Expanded(
@@ -230,17 +250,50 @@ class DashboardPage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          AvatarView(
-            radius: 30,
-            borderColor: ColorData.kcPrimaryDarkColor,
-            isOnlyText: false,
-            avatarType: AvatarType.CIRCLE,
-            backgroundColor: Colors.red,
-            imagePath:
-            doctorModel.profilePic,
-            placeHolder: const Icon(Icons.person, size: 50,),
-            errorWidget: const Icon(Icons.person, size: 50,),
+          SizedBox(
+            height: 30 * 2,
+            width: 30 * 2,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: doctorModel.profilePic
+                  .contains("http")
+                  ? CachedNetworkImage(
+                  imageUrl:
+                  doctorModel.profilePic,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) {
+                    return const Icon(
+                      Icons.person,
+                      size: 50,
+                    );
+                  },
+                  errorWidget: (context, url, error) {
+                    return const Icon(
+                      Icons.person,
+                      size: 50,
+                    );
+                  })
+                  : SizedBox(
+                height: 70,
+                width: 70,
+                child: Image.file(
+                    File(doctorModel.profilePic),
+                    fit: BoxFit.cover),
+              ),
+            ),
           ),
+
+          // AvatarView(
+          //   radius: 30,
+          //   borderColor: ColorData.kcPrimaryDarkColor,
+          //   isOnlyText: false,
+          //   avatarType: AvatarType.CIRCLE,
+          //   backgroundColor: Colors.red,
+          //   imagePath:
+          //   doctorModel.profilePic,
+          //   placeHolder: const Icon(Icons.person, size: 50,),
+          //   errorWidget: const Icon(Icons.person, size: 50,),
+          // ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
