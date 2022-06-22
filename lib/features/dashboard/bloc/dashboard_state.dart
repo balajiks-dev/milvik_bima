@@ -42,3 +42,10 @@ class InitialDashboardFailureState extends DashboardState {
   @override
   List<Object> get props => [error];
 }
+
+class DoctorsViewChangedState extends DashboardState {
+  final bool isListView;
+  const DoctorsViewChangedState({required this.isListView});
+  @override
+  List<Object> get props => [];
+}

@@ -44,6 +44,10 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           yield InitialDashboardFailureState(error: meta.statusMsg);
         }
       }
+    } else if (event is DoctorsViewChangedEvent){
+      yield ShowProgressBar();
+      yield DismissProgressBar();
+      yield DoctorsViewChangedState(isListView: event.isListView);
     }
   }
 }
