@@ -64,9 +64,15 @@ TextStyle ktsFontStyle16YellowRegular = GoogleFonts.roboto(
 );
 
 TextStyle ktsFontStyle16PrimarySemiBold = GoogleFonts.roboto(
-  color: ColorData.kcPrimaryColor,
+  color: ColorData.kcPrimaryDarkColor,
   fontSize: 16,
   fontWeight: FontWeight.w600,
+);
+
+TextStyle ktsFontStyle16WhiteBold = GoogleFonts.roboto(
+  color: ColorData.kcWhite,
+  fontSize: 16,
+  fontWeight: FontWeight.bold,
 );
 
 TextStyle ktsFontStyle14PrimaryRegular = GoogleFonts.roboto(

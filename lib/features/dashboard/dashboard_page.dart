@@ -41,10 +41,10 @@ class DashboardPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: ColorData.kcPrimaryDarkColor,
         appBar: AppBar(
-          backgroundColor: ColorData.kcPrimaryColor,
+          backgroundColor: ColorData.kcPrimaryDarkColor,
           title: Text(
             AppStrings.bimaDoctor,
-            style: ktsFontStyle16SemiBoldWhite,
+            style: ktsFontStyle16WhiteBold,
           ),
           actions: [
             Image.asset(
@@ -53,6 +53,7 @@ class DashboardPage extends StatelessWidget {
             )
           ],
         ),
+        drawerScrimColor: ColorData.kcPrimaryDarkColor,
         drawer: const CommonDrawer(userName: '', emailId: ''),
         body: BlocProvider(
           create: (context) {
