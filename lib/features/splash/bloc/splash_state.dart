@@ -1,5 +1,10 @@
 part of 'splash_bloc.dart';
 
+///
+/// Define for Splash State
+///  @author Balaji Sundaram 21/06/2022.
+///  @version 1.0
+///
 abstract class SplashState extends Equatable {
   const SplashState();
 }

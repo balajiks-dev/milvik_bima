@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:milvik_bima/utils/assets.dart';
 import 'package:milvik_bima/utils/text_styles.dart';
 
 import '../utils/constants.dart';
@@ -17,6 +18,10 @@ class NetworkFailureUI extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset(UIAssets.bimaLogo),
+            ),
             Text(error, style: ktsFontStyle14White),
             verticalSpaceLarge,
             ElevatedButton(

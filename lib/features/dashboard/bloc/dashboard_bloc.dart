@@ -11,6 +11,12 @@ import 'package:milvik_bima/utils/url_utils.dart';
 import 'dashboard_event.dart';
 import 'dashboard_state.dart';
 
+///
+/// Define for Dashboard Bloc
+///  @author Balaji Sundaram 21/06/2022.
+///  @version 1.0
+///
+
 class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   DashboardBloc() : super(InitialDashboardState());
 

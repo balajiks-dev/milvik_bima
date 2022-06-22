@@ -4,10 +4,14 @@ import 'package:milvik_bima/features/dashboard/dashboard_page.dart';
 import 'package:milvik_bima/features/registration/registration.dart';
 import 'package:milvik_bima/features/splash/splash.dart';
 import 'package:milvik_bima/utils/colors.dart';
-import 'package:milvik_bima/utils/keys.dart';
-import 'package:milvik_bima/utils/sputils.dart';
 import 'package:milvik_bima/utils/text_styles.dart';
 import 'bloc/authentication_bloc.dart';
+
+///
+/// Define for App Page
+///  @author Balaji Sundaram 21/06/2022.
+///  @version 1.0
+///
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);

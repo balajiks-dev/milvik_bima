@@ -1,5 +1,11 @@
 import 'package:equatable/equatable.dart';
 
+///
+/// Define for Dashboard Event
+///  @author Balaji Sundaram 21/06/2022.
+///  @version 1.0
+///
+
 abstract class DashboardEvent extends Equatable {
   const DashboardEvent();
 }

@@ -8,6 +8,11 @@ import '../app/bloc/authentication_bloc.dart';
 
 import 'bloc/splash_bloc.dart';
 
+///
+/// Define for Splash Page
+///  @author Balaji Sundaram 21/06/2022.
+///  @version 1.0
+///
 class SplashPage extends StatelessWidget {
   const SplashPage({Key? key}) : super(key: key);
 

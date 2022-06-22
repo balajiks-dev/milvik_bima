@@ -1,5 +1,11 @@
 part of 'authentication_bloc.dart';
 
+///
+/// Define for App State
+///  @author Balaji Sundaram 21/06/2022.
+///  @version 1.0
+///
+///
 class AuthenticationState extends Equatable {
   const AuthenticationState._({
     this.status = AuthenticationStatus.unknown,

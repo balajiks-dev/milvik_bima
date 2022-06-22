@@ -3,14 +3,17 @@ import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:milvik_bima/model/doctors_response_model.dart';
-import 'package:milvik_bima/network/api_services.dart';
-import 'package:milvik_bima/network/meta.dart';
 import 'package:milvik_bima/utils/constants.dart';
 import 'package:milvik_bima/utils/keys.dart';
 import 'package:milvik_bima/utils/sputils.dart';
-import 'package:milvik_bima/utils/url_utils.dart';
 import 'profile_event.dart';
 import 'profile_state.dart';
+
+///
+/// Define for Profile Bloc
+///  @author Balaji Sundaram 21/06/2022.
+///  @version 1.0
+///
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc() : super(InitialProfileState());

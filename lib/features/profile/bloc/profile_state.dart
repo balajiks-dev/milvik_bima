@@ -1,6 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:milvik_bima/model/doctors_response_model.dart';
 
+///
+/// Define for Profile State
+///  @author Balaji Sundaram 21/06/2022.
+///  @version 1.0
+///
+
 abstract class ProfileState extends Equatable {
   const ProfileState();
 }

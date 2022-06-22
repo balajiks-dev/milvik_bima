@@ -47,7 +47,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
             ScaffoldMessenger.of(event.context).showSnackBar(snackBarWidget(
               e.message!,
             ));
-            print(e.message);
+            debugPrint(e.message);
           },
           codeSent: (String? verificationCodeId, [int? forceResendingToken]) {
             verificationId = verificationCodeId ?? "";

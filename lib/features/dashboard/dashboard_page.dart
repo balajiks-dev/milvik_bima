@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:milvik_bima/features/profile/profile_page.dart';
 import 'package:milvik_bima/model/doctors_response_model.dart';
@@ -20,6 +19,12 @@ import '/utils/constants.dart';
 import 'bloc/dashboard_bloc.dart';
 import 'bloc/dashboard_event.dart';
 import 'bloc/dashboard_state.dart';
+
+///
+/// Define for Dashboard Page
+///  @author Balaji Sundaram 21/06/2022.
+///  @version 1.0
+///
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -199,7 +204,7 @@ class DashboardPage extends StatelessWidget {
                                                 );
                                               });
                                             },
-                                            child: Container(
+                                            child: SizedBox(
                                               height: screenHeight(context) * 0.15,
                                               child: Padding(
                                                 padding: const EdgeInsets.all(8.0),

@@ -13,9 +13,15 @@ import 'package:milvik_bima/utils/ui_helpers.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../dashboard/dashboard_page.dart';
-
+///
+/// Define for OTP Screen
+///  @author Balaji Sundaram 22/06/2022.
+///  @version 1.0
+///
 class OtpPage extends StatelessWidget {
   bool isTermsSelected = false;
+
+  OtpPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     TextEditingController otpTextEditingController = TextEditingController();
@@ -190,7 +196,7 @@ class OtpPage extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => TermsAndConditionScreen()));
+                            builder: (context) => const TermsAndConditionScreen()));
                   },
                   child: RichText(
                     text: TextSpan(

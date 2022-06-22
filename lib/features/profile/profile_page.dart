@@ -17,6 +17,12 @@ import 'package:milvik_bima/utils/ui_helpers.dart';
 import '/utils/constants.dart';
 import 'bloc/profile_state.dart';
 
+///
+/// Define for Profile Page
+///  @author Balaji Sundaram 21/06/2022.
+///  @version 1.0
+///
+
 class ProfilePage extends StatelessWidget {
   final int selectedIndex;
 
@@ -67,7 +73,8 @@ class ProfilePage extends StatelessWidget {
                 weightController.text = doctorsResponseModel!.weight;
                 contactNumberController.text =
                     doctorsResponseModel!.primaryContactNo;
-                bloodGroupController.text = doctorsResponseModel!.bloodGroupName;
+                bloodGroupController.text =
+                    doctorsResponseModel!.bloodGroupName;
                 birthDay = doctorsResponseModel!.birthDay;
                 birthMonth = doctorsResponseModel!.birthMonth;
                 birthYear = doctorsResponseModel!.birthYear;
@@ -77,7 +84,7 @@ class ProfilePage extends StatelessWidget {
                 isEditProfile = !isEditProfile;
                 BlocProvider.of<ProfileBloc>(context)
                     .add(InitialProfileEvent(index: selectedIndex));
-              } else if (state is DateofBirthChangeState){
+              } else if (state is DateofBirthChangeState) {
                 birthDay = state.birthDay;
                 birthMonth = state.birthMonth;
                 birthYear = state.birthYear;
@@ -229,6 +236,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  ///Show the Picker for selecting image from Camera/Gallery
   void _showPicker(context) {
     showModalBottomSheet(
         context: context,
@@ -242,7 +250,16 @@ class ProfilePage extends StatelessWidget {
                     title: Text(AppStrings.gallery,
                         style: ktsFontStyle14PrimaryRegular),
                     onTap: () {
-                      _imgFromGallery(context);
+                      final pickedFile = _imgFromGallery(context);
+                      if (pickedFile != null) {
+                        BlocProvider.of<ProfileBloc>(context).add(
+                            ProfilePictureAddEvent(
+                                image: File(pickedFile.path),
+                                index: selectedIndex));
+                      } else {
+                        BlocProvider.of<ProfileBloc>(context)
+                            .add(ProfilePictureNotAddEvent());
+                      }
                       Navigator.of(context).pop();
                     }),
                 ListTile(
@@ -251,7 +268,16 @@ class ProfilePage extends StatelessWidget {
                   title: Text(AppStrings.camera,
                       style: ktsFontStyle14PrimaryRegular),
                   onTap: () {
-                    _imgFromCamera(context);
+                    final pickedFile = _imgFromCamera(context);
+                    if (pickedFile != null) {
+                      BlocProvider.of<ProfileBloc>(context).add(
+                          ProfilePictureAddEvent(
+                              image: File(pickedFile.path),
+                              index: selectedIndex));
+                    } else {
+                      BlocProvider.of<ProfileBloc>(context)
+                          .add(ProfilePictureNotAddEvent());
+                    }
                     Navigator.of(context).pop();
                   },
                 ),
@@ -263,28 +289,13 @@ class ProfilePage extends StatelessWidget {
 
   _imgFromCamera(BuildContext context) async {
     final ImagePicker picker = ImagePicker();
-
-    final pickedFile =
-        await picker.pickImage(source: ImageSource.camera, imageQuality: 50);
-    if (pickedFile != null) {
-      BlocProvider.of<ProfileBloc>(context).add(ProfilePictureAddEvent(
-          image: File(pickedFile.path), index: selectedIndex));
-    } else {
-      BlocProvider.of<ProfileBloc>(context).add(ProfilePictureNotAddEvent());
-    }
+    return await picker.pickImage(source: ImageSource.camera, imageQuality: 50);
   }
 
   _imgFromGallery(BuildContext context) async {
     final picker = ImagePicker();
-
-    final pickedFile =
-        await picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
-    if (pickedFile != null) {
-      BlocProvider.of<ProfileBloc>(context).add(ProfilePictureAddEvent(
-          image: File(pickedFile.path), index: selectedIndex));
-    } else {
-      BlocProvider.of<ProfileBloc>(context).add(ProfilePictureNotAddEvent());
-    }
+    return await picker.pickImage(
+        source: ImageSource.gallery, imageQuality: 50);
   }
 
   showEditProfileButtonView(
@@ -305,11 +316,10 @@ class ProfilePage extends StatelessWidget {
                   contactNumber: contactNumberController.text,
                   height: heightController.text,
                   weight: weightController.text,
-                bloodGroupName: bloodGroupController.text,
-                birthDay: birthDay,
-                birthMonth: birthMonth,
-                birthYear: birthYear
-              ),
+                  bloodGroupName: bloodGroupController.text,
+                  birthDay: birthDay,
+                  birthMonth: birthMonth,
+                  birthYear: birthYear),
             );
           } else {
             BlocProvider.of<ProfileBloc>(context)
@@ -333,262 +343,310 @@ class ProfilePage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 15.0),
-              child: Text(
-                AppStrings.personalDetails,
-                style: ktsFontStyle16Bold,
-              ),
-            ),
-          ),
+          showPersonalDetailTextView(),
           verticalSpaceTiny,
-          Container(
-            margin: const EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              color: ColorData.kcWhite,
-            ),
-            child: FormBuilderTextField(
-              readOnly: !isEditProfile,
-              name: "Profile First Name",
-              controller: firstNameController,
-              keyboardType: TextInputType.text,
-              textInputAction: TextInputAction.done,
-              enableInteractiveSelection: false,
-              maxLines: 1,
-              style: ktsFontStyle16Regular,
-              decoration: InputDecoration(
-                enabled: true,
-                labelText: AppStrings.firstName,
-                focusedBorder: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                suffixIcon: null,
-                contentPadding: const EdgeInsets.all(15.0),
-                labelStyle: ktsFontStyle16RegularGrawy,
-              ),
-            ),
-          ),
+          showFirstNameView(isEditProfile),
           verticalSpaceTiny,
-          Container(
-            margin: const EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              color: ColorData.kcWhite,
-            ),
-            child: FormBuilderTextField(
-              readOnly: !isEditProfile,
-              name: "Profile Last Name",
-              controller: lastNameController,
-              keyboardType: TextInputType.text,
-              textInputAction: TextInputAction.done,
-              enableInteractiveSelection: false,
-              maxLines: 1,
-              style: ktsFontStyle16Regular,
-              decoration: InputDecoration(
-                enabled: true,
-                labelText: AppStrings.lastName,
-                focusedBorder: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                suffixIcon: null,
-                contentPadding: const EdgeInsets.all(15.0),
-                labelStyle: ktsFontStyle16RegularGrawy,
-              ),
-            ),
-          ),
+          showLastNameView(isEditProfile),
           verticalSpaceTiny,
-          Container(
-            margin: const EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              color: ColorData.kcWhite,
-            ),
-            child: FormBuilderTextField(
-              readOnly: !isEditProfile,
-              name: "Profile Gender",
-              controller: genderController,
-              keyboardType: TextInputType.text,
-              textInputAction: TextInputAction.done,
-              enableInteractiveSelection: false,
-              maxLines: 1,
-              style: ktsFontStyle16Regular,
-              decoration: InputDecoration(
-                enabled: true,
-                labelText: AppStrings.gender,
-                focusedBorder: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                suffixIcon: null,
-                contentPadding: const EdgeInsets.all(15.0),
-                labelStyle: ktsFontStyle16RegularGrawy,
-              ),
-            ),
-          ),
+          showProfileGenderView(isEditProfile),
           verticalSpaceTiny,
-          Container(
-            margin: const EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              color: ColorData.kcWhite,
-            ),
-            child: FormBuilderTextField(
-              readOnly: true,
-              name: "Profile Contact Number",
-              controller: contactNumberController,
-              keyboardType: TextInputType.text,
-              textInputAction: TextInputAction.done,
-              enableInteractiveSelection: false,
-              maxLines: 1,
-              style: ktsFontStyle16Regular,
-              decoration: InputDecoration(
-                enabled: true,
-                labelText: AppStrings.contactNumber,
-                focusedBorder: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                suffixIcon: null,
-                contentPadding: const EdgeInsets.all(15.0),
-                labelStyle: ktsFontStyle16RegularGrawy,
-              ),
-            ),
-          ),
+          showContactNumberView(),
           verticalSpaceTiny,
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(AppStrings.dateOfBirth, style: ktsFontStyle16RegularGrawy,),
-              ),
-              verticalSpaceTiny,
-              DropdownDatePicker(
-                isEditable: isEditProfile,
-                textStyle: ktsFontStyle16Regular,
-                boxDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                ), // optional
-                isDropdownHideUnderline: true,  // optional
-                isFormValidator: true, // optional
-                startYear: 1900, // optional
-                endYear: 2022, // optional
-                width: 10, // optional
-                selectedDay: birthDay, // optional
-                selectedMonth: birthMonth, // optional
-                selectedYear: birthYear, // optional
-                onChangedDay: (value) {
-                  print('onChangedDay: $value');
-                  BlocProvider.of<ProfileBloc>(context).add(
-                    DateofBirthChangeEvent(
-                        birthDay: value != null && value.isNotEmpty ? int.parse(value) : 1,
-                      birthYear: birthYear,
-                      birthMonth: birthMonth
-                    ),
-                  );
-                },
-                isExpanded: false, // optional default is true
-                onChangedMonth: (value) {
-                  print('onChangedMonth: $value');
-                  BlocProvider.of<ProfileBloc>(context).add(
-                    DateofBirthChangeEvent(
-                        birthDay: birthDay,
-                        birthMonth: value != null && value.isNotEmpty ? int.parse(value) : 1,
-                        birthYear: birthYear
-                    ),
-                  );
-                },
-                onChangedYear: (value) {
-                  print('onChangedYear: $value');
-                  BlocProvider.of<ProfileBloc>(context).add(
-                    DateofBirthChangeEvent(
-                        birthDay: birthDay,
-                        birthMonth: birthMonth,
-                        birthYear: value != null && value.isNotEmpty ? int.parse(value) : 1900,
-                    ),
-                  );
-                  },
-              ),
-            ],
-          ),
+          showDateOfBirthView(isEditProfile, context),
           verticalSpaceTiny,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(
-                child: Container(
-                    margin: const EdgeInsets.all(5.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      color: ColorData.kcWhite,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 5.0, bottom: 10.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          showCommonView(isEditProfile),
+          verticalSpaceMedium
+        ],
+      ),
+    );
+  }
+
+  Column showDateOfBirthView(bool isEditProfile, BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            AppStrings.dateOfBirth,
+            style: ktsFontStyle16RegularGrawy,
+          ),
+        ),
+        verticalSpaceTiny,
+        DropdownDatePicker(
+          isEditable: isEditProfile,
+          textStyle: ktsFontStyle16Regular,
+          boxDecoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+          ),
+          isDropdownHideUnderline: true,
+          isFormValidator: true,
+          startYear: 1900,
+          endYear: 2022,
+          width: 10,
+          selectedDay: birthDay,
+          selectedMonth: birthMonth, // optional
+          selectedYear: birthYear, // optional
+          onChangedDay: (value) {
+            debugPrint('onChangedDay: $value');
+            BlocProvider.of<ProfileBloc>(context).add(
+              DateofBirthChangeEvent(
+                  birthDay:
+                      value != null && value.isNotEmpty ? int.parse(value) : 1,
+                  birthYear: birthYear,
+                  birthMonth: birthMonth),
+            );
+          },
+          isExpanded: false, // optional default is true
+          onChangedMonth: (value) {
+            debugPrint('onChangedMonth: $value');
+            BlocProvider.of<ProfileBloc>(context).add(
+              DateofBirthChangeEvent(
+                  birthDay: birthDay,
+                  birthMonth:
+                      value != null && value.isNotEmpty ? int.parse(value) : 1,
+                  birthYear: birthYear),
+            );
+          },
+          onChangedYear: (value) {
+            debugPrint('onChangedYear: $value');
+            BlocProvider.of<ProfileBloc>(context).add(
+              DateofBirthChangeEvent(
+                birthDay: birthDay,
+                birthMonth: birthMonth,
+                birthYear:
+                    value != null && value.isNotEmpty ? int.parse(value) : 1900,
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Container showContactNumberView() {
+    return Container(
+      margin: const EdgeInsets.all(10.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: ColorData.kcWhite,
+      ),
+      child: FormBuilderTextField(
+        readOnly: true,
+        name: "Profile Contact Number",
+        controller: contactNumberController,
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.done,
+        enableInteractiveSelection: false,
+        maxLines: 1,
+        style: ktsFontStyle16Regular,
+        decoration: InputDecoration(
+          enabled: true,
+          labelText: AppStrings.contactNumber,
+          focusedBorder: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          suffixIcon: null,
+          contentPadding: const EdgeInsets.all(15.0),
+          labelStyle: ktsFontStyle16RegularGrawy,
+        ),
+      ),
+    );
+  }
+
+  Container showProfileGenderView(bool isEditProfile) {
+    return Container(
+      margin: const EdgeInsets.all(10.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: ColorData.kcWhite,
+      ),
+      child: FormBuilderTextField(
+        readOnly: !isEditProfile,
+        name: "Profile Gender",
+        controller: genderController,
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.done,
+        enableInteractiveSelection: false,
+        maxLines: 1,
+        style: ktsFontStyle16Regular,
+        decoration: InputDecoration(
+          enabled: true,
+          labelText: AppStrings.gender,
+          focusedBorder: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          suffixIcon: null,
+          contentPadding: const EdgeInsets.all(15.0),
+          labelStyle: ktsFontStyle16RegularGrawy,
+        ),
+      ),
+    );
+  }
+
+  Container showLastNameView(bool isEditProfile) {
+    return Container(
+      margin: const EdgeInsets.all(10.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: ColorData.kcWhite,
+      ),
+      child: FormBuilderTextField(
+        readOnly: !isEditProfile,
+        name: "Profile Last Name",
+        controller: lastNameController,
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.done,
+        enableInteractiveSelection: false,
+        maxLines: 1,
+        style: ktsFontStyle16Regular,
+        decoration: InputDecoration(
+          enabled: true,
+          labelText: AppStrings.lastName,
+          focusedBorder: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          suffixIcon: null,
+          contentPadding: const EdgeInsets.all(15.0),
+          labelStyle: ktsFontStyle16RegularGrawy,
+        ),
+      ),
+    );
+  }
+
+  Container showFirstNameView(bool isEditProfile) {
+    return Container(
+      margin: const EdgeInsets.all(10.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: ColorData.kcWhite,
+      ),
+      child: FormBuilderTextField(
+        readOnly: !isEditProfile,
+        name: "Profile First Name",
+        controller: firstNameController,
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.done,
+        enableInteractiveSelection: false,
+        maxLines: 1,
+        style: ktsFontStyle16Regular,
+        decoration: InputDecoration(
+          enabled: true,
+          labelText: AppStrings.firstName,
+          focusedBorder: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          suffixIcon: null,
+          contentPadding: const EdgeInsets.all(15.0),
+          labelStyle: ktsFontStyle16RegularGrawy,
+        ),
+      ),
+    );
+  }
+
+  Center showPersonalDetailTextView() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 15.0),
+        child: Text(
+          AppStrings.personalDetails,
+          style: ktsFontStyle16Bold,
+        ),
+      ),
+    );
+  }
+
+  Row showCommonView(bool isEditProfile) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Expanded(
+          child: Container(
+              margin: const EdgeInsets.all(5.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                color: ColorData.kcWhite,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 5.0, bottom: 10.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                const Icon(Icons.bloodtype, color: ColorData.kcGrayShade_1,),
-                                Expanded(
-                                  child: Text(
-                                    AppStrings.bloodGroup,
-                                    maxLines: 2,
-                                    style: ktsFontStyle12RegularGrawy,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
+                          const Icon(
+                            Icons.bloodtype,
+                            color: ColorData.kcGrayShade_1,
+                          ),
+                          Expanded(
+                            child: Text(
+                              AppStrings.bloodGroup,
+                              maxLines: 2,
+                              style: ktsFontStyle12RegularGrawy,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          isEditProfile
-                              ? Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 20.0, left: 10, right: 10),
-                                  child: TextField(
-                                    controller: bloodGroupController,
-                                    style: ktsFontStyle16Regular,
-                                    decoration: InputDecoration(
-                                      labelStyle: ktsFontStyle16Regular,
-                                      enabledBorder: const UnderlineInputBorder(
-                                        borderSide: BorderSide(color: ColorData.kcPrimaryDarkColor),
-                                      ),
-                                      focusedBorder: const UnderlineInputBorder(
-                                        borderSide: BorderSide(color: ColorData.kcPrimaryDarkColor),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : Text(bloodGroupController.text, style: ktsFontStyle16Regular),
                         ],
                       ),
-                    )),
-              ),
-              Expanded(
-                child: Container(
-                    margin: const EdgeInsets.all(5.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      color: ColorData.kcWhite,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 5.0, bottom: 10.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                const Icon(Icons.height_outlined, color: ColorData.kcGrayShade_1,),
-                                Expanded(
-                                  child: Text(AppStrings.height, maxLines: 1,
-                                    style: ktsFontStyle12RegularGrawy,
-                                    overflow: TextOverflow.ellipsis,),
+                    isEditProfile
+                        ? Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 20.0, left: 10, right: 10),
+                            child: TextField(
+                              controller: bloodGroupController,
+                              style: ktsFontStyle16Regular,
+                              decoration: InputDecoration(
+                                labelStyle: ktsFontStyle16Regular,
+                                enabledBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: ColorData.kcPrimaryDarkColor),
                                 ),
-                              ],
+                                focusedBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: ColorData.kcPrimaryDarkColor),
+                                ),
+                              ),
+                            ),
+                          )
+                        : Text(bloodGroupController.text,
+                            style: ktsFontStyle16Regular),
+                  ],
+                ),
+              )),
+        ),
+        Expanded(
+          child: Container(
+              margin: const EdgeInsets.all(5.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                color: ColorData.kcWhite,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 5.0, bottom: 10.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.height_outlined,
+                            color: ColorData.kcGrayShade_1,
+                          ),
+                          Expanded(
+                            child: Text(
+                              AppStrings.height,
+                              maxLines: 1,
+                              style: ktsFontStyle12RegularGrawy,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          isEditProfile
-                              ? Padding(
+                        ],
+                      ),
+                    ),
+                    isEditProfile
+                        ? Padding(
                             padding: const EdgeInsets.only(
                                 bottom: 20.0, left: 10, right: 10),
                             child: TextField(
@@ -597,74 +655,86 @@ class ProfilePage extends StatelessWidget {
                               decoration: InputDecoration(
                                 labelStyle: ktsFontStyle16Regular,
                                 enabledBorder: const UnderlineInputBorder(
-                                  borderSide: BorderSide(color: ColorData.kcPrimaryDarkColor),
+                                  borderSide: BorderSide(
+                                      color: ColorData.kcPrimaryDarkColor),
                                 ),
                                 focusedBorder: const UnderlineInputBorder(
-                                  borderSide: BorderSide(color: ColorData.kcPrimaryDarkColor),
+                                  borderSide: BorderSide(
+                                      color: ColorData.kcPrimaryDarkColor),
                                 ),
                               ),
                             ),
                           )
-                              : Text(heightController.text, style: ktsFontStyle16Regular,),
-                          verticalSpaceSmall,
-                        ],
-                      ),
-                    )),
+                        : Text(
+                            heightController.text,
+                            style: ktsFontStyle16Regular,
+                          ),
+                    verticalSpaceSmall,
+                  ],
+                ),
+              )),
+        ),
+        Expanded(
+          child: Container(
+              margin: const EdgeInsets.all(5.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                color: ColorData.kcWhite,
               ),
-              Expanded(
-                child: Container(
-                    margin: const EdgeInsets.all(5.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      color: ColorData.kcWhite,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 5.0, bottom: 10.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 5.0, bottom: 10.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                const Icon(Icons.line_weight, color: ColorData.kcGrayShade_1,),
-                                Expanded(
-                                  child: Text(AppStrings.weight, maxLines: 1,
-                                    style: ktsFontStyle12RegularGrawy,
-                                    overflow: TextOverflow.ellipsis,),
-                                ),
-                              ],
+                          const Icon(
+                            Icons.line_weight,
+                            color: ColorData.kcGrayShade_1,
+                          ),
+                          Expanded(
+                            child: Text(
+                              AppStrings.weight,
+                              maxLines: 1,
+                              style: ktsFontStyle12RegularGrawy,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          isEditProfile
-                              ? Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 20.0, left: 10, right: 10),
-                                  child: TextField(
-                                    controller: weightController,
-                                    style: ktsFontStyle16Regular,
-                                    decoration: InputDecoration(
-                                      labelStyle: ktsFontStyle16Regular,
-                                      enabledBorder: const UnderlineInputBorder(
-                                        borderSide: BorderSide(color: ColorData.kcPrimaryDarkColor),
-                                      ),
-                                      focusedBorder: const UnderlineInputBorder(
-                                        borderSide: BorderSide(color: ColorData.kcPrimaryDarkColor),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : Text(weightController.text, style: ktsFontStyle16Regular,),
-                          verticalSpaceSmall,
                         ],
                       ),
-                    )),
-              ),
-            ],
-          ),
-          verticalSpaceMedium
-        ],
-      ),
+                    ),
+                    isEditProfile
+                        ? Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 20.0, left: 10, right: 10),
+                            child: TextField(
+                              controller: weightController,
+                              style: ktsFontStyle16Regular,
+                              decoration: InputDecoration(
+                                labelStyle: ktsFontStyle16Regular,
+                                enabledBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: ColorData.kcPrimaryDarkColor),
+                                ),
+                                focusedBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: ColorData.kcPrimaryDarkColor),
+                                ),
+                              ),
+                            ),
+                          )
+                        : Text(
+                            weightController.text,
+                            style: ktsFontStyle16Regular,
+                          ),
+                    verticalSpaceSmall,
+                  ],
+                ),
+              )),
+        ),
+      ],
     );
   }
 }

@@ -5,7 +5,6 @@ import 'package:milvik_bima/features/dashboard/dashboard_page.dart';
 import 'package:milvik_bima/features/registration/bloc/registration_bloc.dart';
 import 'package:milvik_bima/features/registration/bloc/registration_event.dart';
 import 'package:milvik_bima/features/registration/bloc/registration_state.dart';
-import 'package:milvik_bima/features/registration/terms_condition.dart';
 import 'package:milvik_bima/shared_widgets/loading_indicator.dart';
 import 'package:milvik_bima/shared_widgets/snack_bar.dart';
 import 'package:milvik_bima/utils/colors.dart';
@@ -13,6 +12,11 @@ import 'package:milvik_bima/utils/constants.dart';
 import 'package:milvik_bima/utils/text_styles.dart';
 import 'package:milvik_bima/utils/ui_helpers.dart';
 
+///
+/// Define for Registration page
+///  @author Balaji Sundaram 21/06/2022.
+///  @version 1.0
+///
 class RegistrationPage extends StatelessWidget {
   const RegistrationPage({Key? key}) : super(key: key);
 
@@ -23,10 +27,7 @@ class RegistrationPage extends StatelessWidget {
       // then
       return false; // return true if the route to be popped
     }
-
     String mobileNumber = "";
-    String countryCode = "";
-    String countryName = "";
     GlobalKey<FormState> formKey = GlobalKey();
     TextEditingController phoneNumberController = TextEditingController();
 
@@ -113,16 +114,7 @@ class RegistrationPage extends StatelessWidget {
                                       labelStyle: ktsFontStyle20SemiBoldYellow),
                                   onChanged: (phone) {
                                     mobileNumber = "${phone.countryCode} ${phone.number}";
-                                   // mobileNumber = phone.completeNumber;
-
-                                    print(phone.completeNumber);
-                                  },
-                                  onCountryChanged: (country) {
-                                    countryCode = country.code;
-                                    countryName = country.name;
-
-                                    print(
-                                        'Country changed to: ${country.name}');
+                                    debugPrint(phone.completeNumber);
                                   },
                                 ),
                               ),

@@ -1,3 +1,8 @@
+///
+/// Define for Doctors List
+///  @author Balaji Sundaram 21/06/2022.
+///  @version 1.0
+///
 class DoctorsResponseModel {
   final int id;
   final String firstName;
