@@ -1,34 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:milvik_bima/features/profile/bloc/profile_bloc.dart';
+import 'package:milvik_bima/features/profile/bloc/profile_event.dart';
 import 'package:milvik_bima/model/doctors_response_model.dart';
 import 'package:milvik_bima/shared_widgets/loading_indicator.dart';
 import 'package:milvik_bima/utils/assets.dart';
 import 'package:milvik_bima/utils/colors.dart';
 import 'package:milvik_bima/utils/text_styles.dart';
+import 'package:milvik_bima/utils/ui_helpers.dart';
 import '/utils/constants.dart';
 import 'bloc/profile_state.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
-
-
+  final int selectedIndex;
+  const ProfilePage({Key? key, required this.selectedIndex}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
+    DoctorsResponseModel? doctorsResponseModel;
     return Scaffold(
-      backgroundColor: ColorData.kcPrimaryColor,
-     appBar: AppBar(
-        backgroundColor: ColorData.kcPrimaryColor,
-        title: Text(AppStrings.bimaDoctor, style: ktsFontStyle16PrimarySemiBold,),
-       actions: [
-         Image.asset(UIAssets.bimaLogo, fit: BoxFit.contain,)
-       ],
-     ),
+      backgroundColor: ColorData.kcPrimaryDarkColor,
       body: BlocProvider(
         create: (context) {
-          return ProfileBloc();
+          return ProfileBloc()..add(InitialProfileEvent(index: selectedIndex));
         },
         child: BlocListener<ProfileBloc, ProfileState>(
           listener: (BuildContext context, state) {
@@ -36,25 +30,91 @@ class ProfilePage extends StatelessWidget {
               DialogBuilder(context).showLoadingIndicator();
             } else if (state is DismissProgressBar) {
               DialogBuilder(context).hideOpenDialog();
+            } else if (state is InitialProfileSuccessState){
+              doctorsResponseModel = state.doctorModel;
             }
           },
           child: BlocBuilder<ProfileBloc, ProfileState>(
               builder: (context, state) {
-              return Scaffold(
-                      backgroundColor: ColorData.kcPrimaryColor,
-                      body: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          IconButton(
-                              onPressed: (){
-                                Navigator.pop(context);
-                              },
-                              icon: const Icon(Icons.arrow_back, color: ColorData.kcYellow,)
+              return
+                doctorsResponseModel != null ?
+              Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      Container(
+                        height: 80.0,
+                        color: ColorData.kcPrimaryDarkColor,
+                      ),
+                      Container(
+                        width: screenWidth(context),
+                          decoration: const BoxDecoration(
+                            color: ColorData.kcWhite,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10.0),
+                                topRight: Radius.circular(10.0)),
                           ),
-                        ],
-                      )
-                    );
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 40.0),
+                            child: Column(
+                              children: [
+                                verticalSpaceLarge,
+                                Text(
+                                  "${doctorsResponseModel!
+                                      .firstName} ${doctorsResponseModel!.lastName}".toUpperCase(),
+                                  style: ktsFontStyle16Bold,
+                                ),
+                                verticalSpaceTiny,
+                                showEditProfileButtonView(),
+                                verticalSpaceTiny,
+                                showProfileView(),
+                              ],
+                            ),
+                          ),),
+                    ],
+                  ),
+                  // Profile image
+                  Positioned(
+                      top: 50.0,
+                      child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 40,
+                          backgroundImage: NetworkImage(doctorsResponseModel!.profilePic,
+                          )
+                      ),
+                  ),
+                  Positioned(
+                    left: 10.0,
+                    top: 25.0,
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back, color: ColorData.kcYellowButton,),
+                      onPressed: (){
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                ],
+              ) : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15.0, top: 40.0),
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back, color: ColorData.kcYellowButton,),
+                      onPressed: (){
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: screenHeight(context) * 0.4),
+                    child: Center(
+                      child: Text(AppStrings.noDataFound, style: ktsFontStyle16Regular,),
+                    ),
+                  ),
+                ],
+              );
             },
           ),
         ),
@@ -62,79 +122,44 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  List<Widget> showTopRatedDoctorView(List<DoctorsResponseModel> topRatedDoctorsList){
-    List<Widget> topRatedDoctorCardView = <Widget>[];
-    for(int i = 0; i < topRatedDoctorsList.length; i++){
-      topRatedDoctorCardView.add(
-          Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CircleAvatar(
-                    radius: 30, // Image radius
-                    backgroundImage: NetworkImage(topRatedDoctorsList[i].profilePic)
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(8.0, 10.0, 5.0, 2.0),
-                        child: Text("${topRatedDoctorsList[i].firstName} ${topRatedDoctorsList[i].lastName}", style: ktsFontStyle16PrimarySemiBold,),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(8.0, 0.0, 5.0, 2.0),
-                        child: Text(topRatedDoctorsList[i].qualification, style: ktsFontStyle14PrimaryRegular,),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(8.0, 10.0, 5.0, 2.0),
-                        child: Text("Star Rating: ${topRatedDoctorsList[i].rating}", style: ktsFontStyle14RegularBlack),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          )
-      );
-    }
-    return topRatedDoctorCardView;
+  showEditProfileButtonView(){
+    return Container(
+      height: 60,
+      padding: const EdgeInsets.all(12.0),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30.0)
+      ),
+      child: TextButton(
+        onPressed: () {
+          // BlocProvider.of<RegistrationBloc>(context).add(
+          //     RegistrationButtonPressed(
+          //         mobileNumber: mobileNumber, context: context));
+
+        },
+        style: TextButton.styleFrom(
+          backgroundColor: ColorData.kcGreenButton,
+        ),
+        child: Text(
+          AppStrings.editProfile,
+          style: ktsFontStyle14White,
+        ),
+      ),
+    );
   }
 
-  showDoctorCardView(DoctorsResponseModel doctorModel){
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  showProfileView(){
+    return Container(
+      color: ColorData.kcWhite,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
-            radius: 30, // Image radius
-            backgroundImage: NetworkImage(doctorModel.profilePic)
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 10.0, 5.0, 2.0),
-                  child: Text("${doctorModel.firstName} ${doctorModel.lastName}", style: ktsFontStyle16PrimarySemiBold,),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 0.0, 5.0, 2.0),
-                  child: Text(doctorModel.specialization, style: ktsFontStyle14PrimaryRegular,),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 10.0, 5.0, 2.0),
-                  child: Text(doctorModel.description, style: ktsFontStyle14RegularBlack, maxLines: 2, overflow: TextOverflow.ellipsis,),
-                )
-              ],
+          Padding(
+            padding: const EdgeInsets.only(top: 15.0),
+            child: Text(
+              AppStrings.personalDetails,
+              style: ktsFontStyle16Bold,
             ),
           ),
-          const Icon(Icons.chevron_right, color: ColorData.kcPrimaryColor,)
         ],
       ),
     );

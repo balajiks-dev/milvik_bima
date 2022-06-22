@@ -6,6 +6,8 @@ abstract class ProfileEvent extends Equatable {
 }
 
 class InitialProfileEvent extends ProfileEvent {
+  final int index;
+  const InitialProfileEvent({required this.index});
   @override
   List<Object> get props => [];
 }

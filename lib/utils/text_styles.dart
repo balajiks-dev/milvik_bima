@@ -21,6 +21,12 @@ TextStyle ktsFontStyle16Regular = GoogleFonts.roboto(
   fontWeight: FontWeight.w400,
 );
 
+TextStyle ktsFontStyle16Bold = GoogleFonts.roboto(
+  color: ColorData.kcBlack,
+  fontSize: 16,
+  fontWeight: FontWeight.w700,
+);
+
 TextStyle ktsFontStyle16RegularWhite = GoogleFonts.roboto(
   color: ColorData.kcWhite,
   fontSize: 16,

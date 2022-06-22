@@ -10,6 +10,13 @@ class InitialProfileState extends ProfileState {
   List<Object> get props => [];
 }
 
+class InitialProfileSuccessState extends ProfileState {
+  final DoctorsResponseModel doctorModel;
+  const InitialProfileSuccessState({required this.doctorModel});
+  @override
+  List<Object> get props => [];
+}
+
 class ShowProgressBar extends ProfileState {
   @override
   List<Object> get props => [];

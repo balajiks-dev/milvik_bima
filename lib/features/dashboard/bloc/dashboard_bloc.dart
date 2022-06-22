@@ -36,7 +36,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           jsonDecode(meta.statusMsg).forEach(
                   (f) => doctorsList.add(DoctorsResponseModel.fromJson(f)));
           doctorsList.sort((a, b) => b.rating.compareTo(a.rating));
-          SPUtil.putString(KeyStrings.kDoctorsList, doctorsList.toString());
+          SPUtil.putString(KeyStrings.kDoctorsList, meta.statusMsg);
           yield DismissProgressBar();
           yield InitialDashboardSuccessState(doctorsList: doctorsList);
         } else {

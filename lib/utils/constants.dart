@@ -20,4 +20,16 @@ class AppStrings {
   static const String continueText = "Continue";
   static const String enterVerificationCode = "ENTER VERIFICATION CODE";
   static const String invalidOTP = "Invalid OTP";
+
+  //Profile
+  static const String editProfile = "EDIT PROFILE";
+  static const String personalDetails = "PERSONAL DETAILS";
+  static const String firstName = "FIRST NAME";
+  static const String lastName = "LAST NAME";
+  static const String gender = "GENDER";
+  static const String contactNumber = "CONTACT NUMBER";
+  static const String dateOfBirth = "DATE OF BIRTH";
+  static const String bloodGroup = "BLOOD GROUP";
+  static const String height = "HEIGHT";
+  static const String weight = "WEIGHT";
 }

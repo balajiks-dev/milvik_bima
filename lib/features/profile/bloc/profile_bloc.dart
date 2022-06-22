@@ -18,7 +18,17 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   Stream<ProfileState> mapEventToState(
     ProfileEvent event,
   ) async* {
-    if (event is UpdateProfileEvent) {
+    if(event is InitialProfileEvent){
+      yield ShowProgressBar();
+      String doctorsListString = SPUtil.getString(KeyStrings.kDoctorsList);
+      List<DoctorsResponseModel> doctorsList = <DoctorsResponseModel>[];
+      jsonDecode(doctorsListString).forEach(
+              (f) => doctorsList.add(DoctorsResponseModel.fromJson(f)));
+      doctorsList.sort((a,b) => b.rating.compareTo(a.rating));
+      yield DismissProgressBar();
+      yield InitialProfileSuccessState(doctorModel: doctorsList[event.index]);
+    }
+    else if (event is UpdateProfileEvent) {
       yield ShowProgressBar();
       yield DismissProgressBar();
       yield UpdateProfileSuccessState();
